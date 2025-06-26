@@ -885,7 +885,7 @@ specifically at commit <a href="https://github.com/Instagram/MonkeyType/tree/70c
 <p>Coming soon!</p>
 <h2 id="create-an-execution-environment">Create an Execution Environment</h2>
 <p>First, create the conda environment for the target repository.
-<div class="highlight"><pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>swesmith.build_repo.try_install<span class="w"> </span>Instagram/MonkeyType<span class="w"> </span>install_repo.sh<span class="w"> </span><span class="se">\</span>
+<div class="highlight"><pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>swesmith.build_repo.try_install_py<span class="w"> </span>Instagram/MonkeyType<span class="w"> </span>install_repo.sh<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--commit<span class="w"> </span>70c3acf62950be5dfb28743c7a719bfdecebcd84
 </code></pre></div>
 where <code>install_repo.sh</code> is the script that installs the repository.
@@ -899,7 +899,7 @@ where <code>install_repo.sh</code> is the script that installs the repository.
 <p>This command will create two artifacts:
 1. A mirror of the original repository at the specified commit, created under <a href="https://github.com/orgs/swesmith/repositories"><code>swesmith</code></a>. To change the organization, you can...
     * Pass in an <code>--org</code> argument, or
-    * (If built from source) Change <code>ORG_NAME</code> in <code>swesmith/constants.py</code>
+    * (If built from source) Change <code>ORG_NAME_GH</code> in <code>swesmith/constants.py</code>
 2. A Docker image (<code>swesmith.x86_64.&lt;repo&gt;.&lt;commit&gt;</code>) which contains the installed codebase.</p>
 <p>It's good practice to check that your Docker image works as expected.
 <div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>--rm<span class="w"> </span>swesmith.x86_64.instagram__monkeytype.70c3acf6
