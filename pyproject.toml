@@ -44,11 +44,12 @@ dependencies = [
     "tree-sitter-go",
     "tree-sitter-javascript",
     "tree-sitter-java",
+    "tree-sitter-php>=0.23.11",
     "tree-sitter-ruby",
     "tree-sitter-rust==v0.23.2",
+    "tree-sitter-typescript",
     "unidiff",
     "textual",
-    "tree-sitter-php>=0.23.11",
 ]
 
 [project.optional-dependencies]

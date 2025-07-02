@@ -6,6 +6,7 @@ from swesmith.bug_gen.adapters.php import get_entities_from_file_php
 from swesmith.bug_gen.adapters.python import get_entities_from_file_py
 from swesmith.bug_gen.adapters.ruby import get_entities_from_file_rb
 from swesmith.bug_gen.adapters.rust import get_entities_from_file_rs
+from swesmith.bug_gen.adapters.typescript import get_entities_from_file_ts
 
 get_entities_from_file = {
     "c": get_entities_from_file_c,
@@ -16,4 +17,5 @@ get_entities_from_file = {
     "py": get_entities_from_file_py,
     "rb": get_entities_from_file_rb,
     "rs": get_entities_from_file_rs,
+    "ts": get_entities_from_file_ts,
 }
