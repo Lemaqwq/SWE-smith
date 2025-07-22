@@ -65,9 +65,38 @@ def test_get_entities_from_file_ts_stubs(entities):
 
 def test_get_entities_from_file_ts_complexity(entities):
     """Test that complexity is always >= 1 for all methods."""
-    for e in entities:
-        print(e.complexity)
-    assert all(e.complexity == 1 for e in entities)
+    assert [e.complexity for e in entities] == [
+        2,
+        2,
+        2,
+        2,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        5,
+        2,
+        2,
+        8,
+        12,
+        1,
+        3,
+        3,
+        1,
+        5,
+        5,
+        2,
+        4,
+        2,
+        2,
+        2,
+        3,
+        3,
+    ]
 
 
 def test_get_entities_from_file_ts_exact(entities):
