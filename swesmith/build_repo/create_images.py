@@ -11,10 +11,10 @@ from collections import OrderedDict
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from tqdm import tqdm
 
-from swesmith.profiles import global_registry
+from swesmith.profiles import registry
 
 
-def build_profile_image(profile):
+def build_profile_image(profile, push=False):
     """
     Build a Docker image for a specific profile.
 
@@ -27,18 +27,20 @@ def build_profile_image(profile):
     try:
         profile.create_mirror()
         profile.build_image()
+        if push:
+            profile.push_image()
         return (profile.image_name, True, None)
     except Exception as e:
         error_msg = f"Error building {profile.image_name}: {str(e)}"
         return (profile.image_name, False, error_msg)
 
 
-def build_all_images(max_workers=4, profile_filter=None, proceed=False):
+def build_all_images(workers=4, profile_filter=None, proceed=False, push=False):
     """
     Build Docker images for all registered profiles in parallel.
 
     Args:
-        max_workers: Maximum number of parallel workers
+        workers: Maximum number of parallel workers
         profile_filter: Optional list of profile mirror names to filter by
         proceed: Whether to proceed without confirmation
 
@@ -46,7 +48,7 @@ def build_all_images(max_workers=4, profile_filter=None, proceed=False):
         tuple: (successful_builds, failed_builds)
     """
     # Get all available profiles
-    all_profiles = global_registry.values()
+    all_profiles = registry.values()
 
     # Remove environments that have already been built
     client = docker.from_env()
@@ -94,10 +96,10 @@ def build_all_images(max_workers=4, profile_filter=None, proceed=False):
     with tqdm(
         total=len(profiles_to_build), smoothing=0, desc="Building environment images"
     ) as pbar:
-        with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        with ThreadPoolExecutor(max_workers=workers) as executor:
             # Submit all build tasks
             future_to_profile = {
-                executor.submit(build_profile_image, profile): profile
+                executor.submit(build_profile_image, profile, push): profile
                 for profile in profiles_to_build
             }
 
@@ -128,12 +130,14 @@ def main():
         description="Build Docker images for all registered repository profiles"
     )
     parser.add_argument(
-        "--max-workers",
+        "-w",
+        "--workers",
         type=int,
         default=4,
         help="Maximum number of parallel workers (default: 4)",
     )
     parser.add_argument(
+        "-p",
         "--profiles",
         type=str,
         nargs="+",
@@ -143,6 +147,11 @@ def main():
         "-y", "--proceed", action="store_true", help="Proceed without confirmation"
     )
     parser.add_argument(
+        "--push",
+        action="store_true",
+        help="Push built images to Docker Hub after building (default: False)",
+    )
+    parser.add_argument(
         "--list-envs", action="store_true", help="List all available profiles and exit"
     )
 
@@ -150,12 +159,15 @@ def main():
 
     if args.list_envs:
         print("All execution environment Docker images:")
-        for profile in global_registry.values():
+        for profile in registry.values():
             print(f"  {profile.image_name}")
         return
 
     successful, failed = build_all_images(
-        max_workers=args.max_workers, profile_filter=args.profiles, proceed=args.proceed
+        workers=args.workers,
+        profile_filter=args.profiles,
+        proceed=args.proceed,
+        push=args.push,
     )
 
     if failed:

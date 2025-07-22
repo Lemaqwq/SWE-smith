@@ -35,10 +35,9 @@ from swesmith.constants import (
     LOG_DIR_ISSUE_GEN,
     TEST_OUTPUT_END,
     TEST_OUTPUT_START,
-    TIMEOUT,
 )
 from swesmith.issue_gen.utils import get_test_function
-from swesmith.profiles import global_registry
+from swesmith.profiles import RepoProfile, registry
 from swesmith.profiles.python import PythonProfile
 from tqdm.auto import tqdm
 from tqdm.contrib.logging import logging_redirect_tqdm
@@ -62,18 +61,16 @@ TEST_INFO = """**Test Source Code**
 """
 
 
-def get_verbose_test_cmd(instance: dict, test_idx: int | None = None):
+def get_verbose_test_cmd(instance: dict, rp: RepoProfile, test_idx: int | None = None):
     """
     Get test command that runs a random F2P test verbosely.
     """
-    test_cmd = global_registry.get(instance["repo"].split("/")[-1]).test_cmd
-
+    test_cmd = rp.test_cmd
     # TODO: This should probably be changed, or incorporated into the profile
     if test_cmd == PythonProfile.test_cmd:
         test_cmd = test_cmd.replace(
             PythonProfile.test_cmd, "pytest -v --showlocals --tb=long --color=no"
         )
-
     f2p_test = (
         random.choice(instance[FAIL_TO_PASS])
         if test_idx is None
@@ -83,7 +80,7 @@ def get_verbose_test_cmd(instance: dict, test_idx: int | None = None):
     return test_cmd
 
 
-def run_command_in_container(instance: dict, command: str):
+def run_command_in_container(instance: dict, command: str, rp: RepoProfile):
     """
     Run a command in a docker container.
     """
@@ -127,12 +124,12 @@ def run_command_in_container(instance: dict, command: str):
     # Checkout the commit corresponding to the bug + run testing command
     container.exec_run("git fetch", workdir=DOCKER_WORKDIR, user=DOCKER_USER)
     container.exec_run(
-        f"git checkout {instance['base_commit']}",
+        f"git checkout {instance['instance_id']}",
         workdir=DOCKER_WORKDIR,
         user=DOCKER_USER,
     )
     test_output, _, _ = exec_run_with_timeout(
-        container, "/bin/bash /eval.sh", timeout=TIMEOUT
+        container, "/bin/bash /eval.sh", timeout=rp.timeout
     )
     start_idx = test_output.find(TEST_OUTPUT_START) + len(TEST_OUTPUT_START)
     end_idx = test_output.find(TEST_OUTPUT_END)
@@ -158,7 +155,8 @@ def _process_instance(instance: dict, config_file: str | None, model: str | None
 
     cloned = False
     if log_dir.exists() and path_metadata.exists() and path_issue.exists():
-        metadata = json.load(open(path_metadata, "r"))
+        with open(path_metadata, "r") as f:
+            metadata = json.load(f)
         test_idx = metadata["test_idx"]
         test_info = metadata["test_info"]
         test_output = metadata["test_output"]
@@ -173,7 +171,8 @@ def _process_instance(instance: dict, config_file: str | None, model: str | None
             return {"completed": 1, "timed_out": 0, "failed": 0}
     else:
         test_idx = random.randint(0, len(instance[FAIL_TO_PASS]) - 1)
-        cmd = get_verbose_test_cmd(instance, test_idx)
+        rp = registry.get_from_inst(instance)
+        cmd = get_verbose_test_cmd(instance, rp, test_idx)
         test_output = run_command_in_container(instance, cmd)
         test_func = get_test_function(instance, test_idx)
         test_src = test_func["test_src"]
@@ -182,7 +181,8 @@ def _process_instance(instance: dict, config_file: str | None, model: str | None
 
     generated = None
     if config_file and model:
-        config = yaml.safe_load(open(config_file, "r"))
+        with open(config_file, "r") as f:
+            config = yaml.safe_load(f)
         messages = [
             {"content": config["system"], "role": "system"},
             {
@@ -229,7 +229,8 @@ def main(dataset_path: str, config_file: str | None, model: str | None, n_worker
             "Config file must be provided if model is provided."
         )
 
-    dataset = json.load(open(dataset_path, "r"))
+    with open(dataset_path, "r") as f:
+        dataset = json.load(f)
     print(f"Found {len(dataset)} task instances to generate instructions for")
     random.seed(24)
 

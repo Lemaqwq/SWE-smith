@@ -22,18 +22,27 @@ def cleanup(repo_name: str, env_name: str | None = None):
             stderr=subprocess.DEVNULL,
         )
         print("> Removed repository")
-    env_list = subprocess.run(
-        "conda env list", check=True, shell=True, text=True, capture_output=True
-    ).stdout
-    if env_name is not None and env_name in env_list:
-        subprocess.run(
-            f"conda env remove -n {env_name} -y",
-            check=True,
-            shell=True,
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
-        )
-        print("> Removed conda environment")
+    # If env not found, skip removal
+    if env_name is not None:
+        try:
+            env_list = subprocess.run(
+                "conda env list", check=True, shell=True, text=True, capture_output=True
+            ).stdout
+            if env_name in env_list:
+                subprocess.run(
+                    f"conda env remove -n {env_name} -y",
+                    check=True,
+                    shell=True,
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL,
+                )
+                print("> Removed conda environment")
+            else:
+                print(f"> Environment '{env_name}' not found, skipping removal")
+        except subprocess.CalledProcessError as e:
+            print(
+                f"> Warning: Failed to check/remove conda environment '{env_name}': {e}"
+            )
 
 
 def main(
@@ -108,12 +117,21 @@ def main(
         )
 
         # Edit env.yml such that name of package is excluded from `pip`
-        lines = open(p._env_yml, "r").readlines()
+        with open(p._env_yml, "r") as f:
+            lines = f.readlines()
         with open(p._env_yml, "w") as f:
             for line in lines:
-                if line.strip().startswith(f"- {p.repo}=="):
+                # Exclude the package by both repository name and lowercase package name
+                if line.strip().startswith(f"- {p.repo}==") or line.strip().startswith(
+                    f"- {p.repo.lower()}=="
+                ):
                     continue
                 f.write(line)
+
+        with open(install_script) as install_f:
+            install_lines = [
+                l.strip("\n") for l in install_f.readlines() if len(l.strip()) > 0
+            ]
 
         with open(str(p._env_yml).replace(".yml", ".sh"), "w") as f:
             f.write(
@@ -123,11 +141,7 @@ def main(
                         f"git clone git@github.com:{p.owner}/{p.repo}.git",
                         f"git checkout {p.commit}",
                     ]
-                    + [
-                        l.strip("\n")
-                        for l in open(install_script).readlines()
-                        if len(l.strip()) > 0
-                    ]
+                    + install_lines
                 )
                 + "\n"
             )

@@ -21,6 +21,11 @@ def test_file_c():
 
 
 @pytest.fixture
+def test_file_c_sharp():
+    return Path(repo_root) / "tests/test_logs/files/c_sharp/ReadTraceNexusImporter.cs"
+
+
+@pytest.fixture
 def test_file_go():
     return Path(repo_root) / "tests/test_logs/files/go/logger.go"
 
@@ -93,7 +98,7 @@ def logs_run_validation():
 
 @pytest.fixture
 def ft_xml_example():
-    return Path(repo_root) / "tests/test_logs/ft_xml_example.jsonl"
+    return Path(repo_root) / "tests/test_logs/run_evaluation.xml.jsonl"
 
 
 @pytest.fixture

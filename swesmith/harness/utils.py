@@ -1,4 +1,5 @@
 import docker
+import fnmatch
 import traceback
 
 from docker.models.containers import Container
@@ -29,9 +30,35 @@ from swesmith.constants import (
     LOG_DIR_RUN_VALIDATION,
     TEST_OUTPUT_END,
     TEST_OUTPUT_START,
-    TIMEOUT,
 )
-from swesmith.profiles import global_registry
+from swesmith.profiles import registry
+from unidiff import PatchSet
+
+
+def matches_instance_filter(instance_id: str, instance_ids: list[str] | None) -> bool:
+    """
+    Check if an instance_id matches the filtering criteria.
+
+    Args:
+        instance_id: The instance ID to check
+        instance_ids: List of instance IDs or patterns to match against
+
+    Returns:
+        True if the instance should be included, False otherwise
+    """
+    if instance_ids is None:
+        return True
+
+    for filter_item in instance_ids:
+        # Check for exact match first
+        if instance_id == filter_item:
+            return True
+
+        # Check for pattern match (supports * and ? wildcards)
+        if fnmatch.fnmatch(instance_id, filter_item):
+            return True
+
+    return False
 
 
 def _apply_patch(
@@ -69,10 +96,11 @@ def run_patch_in_container(
     instance: dict,
     run_id: str,
     log_dir: Path,
+    timeout: int,
     patch: str | None = None,
     commit: str | None = None,
+    f2p_only: bool = False,
     is_gold: bool = False,
-    timeout: int = TIMEOUT,
 ) -> tuple[Logger, bool] | None:
     """
     Run a patch in a container. The general logical flow is as follows:
@@ -89,10 +117,11 @@ def run_patch_in_container(
     container = None
     client = docker.from_env()
     instance_id = instance[KEY_INSTANCE_ID]
-    rp = global_registry.get_from_inst(instance)
+    rp = registry.get_from_inst(instance)
+    is_eval = log_dir == RUN_EVALUATION_LOG_DIR
     try:
         container_type = None
-        if log_dir == RUN_EVALUATION_LOG_DIR:
+        if is_eval:
             container_type = "eval"
         elif log_dir == LOG_DIR_RUN_VALIDATION:
             container_type = "val"
@@ -105,6 +134,7 @@ def run_patch_in_container(
         logger = setup_logger(container_name, log_file)
 
         # Start docker container
+        rp.pull_image()
         container = client.containers.create(
             image=rp.image_name,
             name=container_name,
@@ -126,18 +156,57 @@ def run_patch_in_container(
             if val.exit_code != 0:
                 logger.info(f"CHECKOUT FAILED: {val.output.decode(UTF8)}")
                 return logger, False
+            if is_eval:
+                # NOTE: Key assumption we make is that each branch has two commits
+                # 1. Bug commit
+                # 2. F2P Test File(s) removal commit (on top of 1).
+                # The `HEAD~1` corresponds to reverting the branch to (1), which
+                # effectively brings the tests back into the codebase.
+                val = container.exec_run(
+                    "git checkout HEAD~1", workdir=DOCKER_WORKDIR, user=DOCKER_USER
+                )
+                if val.exit_code != 0:
+                    logger.info(
+                        f"CHECKOUT TO BUG STAGE FAILED: {val.output.decode(UTF8)}"
+                    )
+                    return logger, False
 
         # If provided, copy patch to container and apply it to codebase
-        if patch is not None:
+        if patch is not None and len(patch) >= 1:
+            logger.info("Applying patch to container...")
+
+            # Revert any changes to those files in the container to ensure a clean state
+            changed_files = " ".join([x.path for x in PatchSet(patch)])
+            container.exec_run(
+                f"git checkout -- {changed_files}",
+                workdir=DOCKER_WORKDIR,
+                user=DOCKER_USER,
+            )
+
+            # Apply the patch inside the container
             patch_file = Path(log_dir / "patch.diff")
             patch_file.write_text(patch)
             logger.info(f"Patch written to {patch_file}, now applying to container...")
             copy_to_container(container, patch_file, Path(DOCKER_PATCH))
             _apply_patch(instance_id, container, logger, is_gold)
 
+            if is_eval:
+                # For evaluation, removes any changes to test related files.
+                f2p_files, p2p_files = rp.get_test_files(instance)
+                test_files = " ".join(f2p_files + p2p_files)
+                if test_files:
+                    container.exec_run(
+                        f"git checkout -- {test_files}",
+                        workdir=DOCKER_WORKDIR,
+                        user=DOCKER_USER,
+                    )
+                    logger.info(
+                        f"Reverted changes to test files in container: {test_files}"
+                    )
+
         # Copy eval script to container
         eval_file = Path(log_dir / "eval.sh")
-        test_command, _ = rp.get_test_cmd(instance)
+        test_command, _ = rp.get_test_cmd(instance, f2p_only=f2p_only)
         eval_file.write_text(
             "\n".join(
                 [

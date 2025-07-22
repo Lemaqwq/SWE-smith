@@ -34,6 +34,11 @@ def get_messages(traj: dict) -> list[dict]:
     if "messages" in last_step:
         return last_step["messages"][:-1]
     else:
+        if last_step["response"] in [
+            "Exit due to cost limit",
+            "Exit due to context window",
+        ]:
+            return traj["trajectory"][-2]["query"][:]
         return last_step["query"][:]
 
 
@@ -56,23 +61,24 @@ def transform_traj_backticks(traj: dict) -> dict:
     return {"messages": new_traj}
 
 
-def transform_traj_xml(traj: dict) -> dict:
-    def tool_call_to_action(tool_calls: None | list[dict]) -> list[str]:
-        actions = []
-        if tool_calls is None:
-            return []
-        for tool_call in tool_calls:
-            action = [f"<function={tool_call['function']['name']}>"]
-            arguments = json.loads(tool_call["function"]["arguments"])
-            for k, v in arguments.items():
-                a = f"<parameter={k}>{v}</parameter>"
-                if k in XML_STR_REPLACES:
-                    a = f"<parameter={k}>\n{v}\n</parameter>"
-                action.append(a)
-            action.append("</function>")
-            actions.append("\n".join(action))
-        return actions
+def tool_call_to_action(tool_calls: None | list[dict]) -> list[str]:
+    actions = []
+    if tool_calls is None:
+        return []
+    for tool_call in tool_calls:
+        action = [f"<function={tool_call['function']['name']}>"]
+        arguments = json.loads(tool_call["function"]["arguments"])
+        for k, v in arguments.items():
+            a = f"<parameter={k}>{v}</parameter>"
+            if k in XML_STR_REPLACES:
+                a = f"<parameter={k}>\n{v}\n</parameter>"
+            action.append(a)
+        action.append("</function>")
+        actions.append("\n".join(action))
+    return actions
 
+
+def transform_traj_xml(traj: dict) -> dict:
     new_traj = []
     for message in get_messages(traj):
         role = message["role"] if message["role"] != "tool" else "user"
@@ -84,8 +90,11 @@ def transform_traj_xml(traj: dict) -> dict:
                     + "<function=submit>\n</function>"
                 )
             else:
-                action = "\n".join(tool_call_to_action(message["tool_calls"]))
-                content = f"{message['thought']}\n\n{action}"
+                content = message.get("thought", message["content"])
+                if "tool_calls" in message:
+                    action = "\n".join(tool_call_to_action(message["tool_calls"]))
+                    content += f"\n\n{action}"
+                content = content.strip()
         elif message["role"] == "system":
             # We replace the system prompt that was used for generating the training trajectories
             # with the system prompt that SWE-agent-LM will use for inference.
@@ -102,4 +111,12 @@ def transform_traj_xml(traj: dict) -> dict:
     return {"messages": new_traj}
 
 
-MAP_STYLE_TO_FUNC = {"ticks": transform_traj_backticks, "xml": transform_traj_xml}
+def transform_traj_toolcalls(traj: dict) -> dict:
+    return {"messages": get_messages(traj)}
+
+
+MAP_STYLE_TO_FUNC = {
+    "ticks": transform_traj_backticks,
+    "tool": transform_traj_toolcalls,
+    "xml": transform_traj_xml,
+}

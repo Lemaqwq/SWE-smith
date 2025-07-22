@@ -31,15 +31,11 @@ ORG_NAME_GH = "swesmith"
 PREFIX_BUG = "bug"
 PREFIX_METADATA = "metadata"
 REF_SUFFIX = ".ref"
-SGLANG_API_KEY = "swesmith"
 TEMP_PATCH = "_temp_patch_swesmith.diff"
 TEST_OUTPUT_END = ">>>>> End Test Output"
 TEST_OUTPUT_START = ">>>>> Start Test Output"
-TIMEOUT = 120
 TODO_REWRITE = "TODO: Implement this function"
 UBUNTU_VERSION = "22.04"
-VOLUME_NAME_DATASET = "datasets"
-VOLUME_NAME_MODEL = "llm-weights"
 
 GIT_APPLY_CMDS = [
     "git apply --verbose",
@@ -174,8 +170,5 @@ class BugRewrite:
 
 
 def generate_hash(s):
-    return "".join(
-        random.Random(int(hashlib.sha256(s.encode()).hexdigest(), 16)).choices(
-            string.ascii_lowercase + string.digits, k=8
-        )
-    )
+    rng = random.Random(int(hashlib.sha256(s.encode()).hexdigest(), 16))
+    return "".join(rng.choice(string.ascii_lowercase + string.digits) for _ in range(8))

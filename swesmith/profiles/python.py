@@ -3,11 +3,16 @@ import re
 from dataclasses import dataclass, field
 
 from pathlib import Path
-from swebench.harness.constants import FAIL_TO_PASS, TestStatus
+from swebench.harness.constants import (
+    FAIL_TO_PASS,
+    PASS_TO_PASS,
+    KEY_INSTANCE_ID,
+    TestStatus,
+)
 from swebench.harness.docker_build import build_image as build_image_sweb
 from swebench.harness.dockerfiles import get_dockerfile_env
 from swesmith.constants import LOG_DIR_ENV, ENV_NAME, INSTANCE_REF
-from swesmith.profiles.base import RepoProfile, global_registry
+from swesmith.profiles.base import RepoProfile, registry
 from swesmith.profiles.utils import INSTALL_BAZEL, INSTALL_CMAKE
 
 
@@ -25,8 +30,19 @@ class PythonProfile(RepoProfile):
     install_cmds: list[str] = field(
         default_factory=lambda: ["python -m pip install -e ."]
     )
-    test_cmd: str = "pytest --disable-warnings --color=no --tb=no --verbose"
-    test_exts: list[str] = field(default_factory=lambda: [".py"])
+    test_cmd: str = (
+        "source /opt/miniconda3/bin/activate; "
+        f"conda activate {ENV_NAME}; "
+        "pytest --disable-warnings --color=no --tb=no --verbose"
+    )
+    exts: list[str] = field(default_factory=lambda: [".py"])
+
+    def get_test_files(self, instance: dict) -> tuple[list[str], list[str]]:
+        assert FAIL_TO_PASS in instance and PASS_TO_PASS in instance, (
+            f"Instance {instance[KEY_INSTANCE_ID]} missing required keys {FAIL_TO_PASS} or {PASS_TO_PASS}"
+        )
+        _helper = lambda tests: sorted(list(set([x.split("::", 1)[0] for x in tests])))
+        return _helper(instance[FAIL_TO_PASS]), _helper(instance[PASS_TO_PASS])
 
     def build_image(self):
         BASE_IMAGE_KEY = "jyangballin/swesmith.x86_64"
@@ -34,7 +50,8 @@ class PythonProfile(RepoProfile):
         PATH_TO_REQS = "swesmith_environment.yml"
 
         client = docker.from_env()
-        reqs = open(self._env_yml).read()
+        with open(self._env_yml) as f:
+            reqs = f.read()
 
         setup_commands = [
             "#!/bin/bash",
@@ -159,10 +176,10 @@ class Boltons3bfcfdd0(PythonProfile):
 
 
 @dataclass
-class BoxA23451d2(PythonProfile):
-    owner: str = "cdgriffith"
-    repo: str = "Box"
-    commit: str = "a23451d2869a511280eebe194efca41efadd2706"
+class Bottlea8dfef30(PythonProfile):
+    owner: str = "bottlepy"
+    repo: str = "bottle"
+    commit: str = "a8dfef301dec35f13e7578306002c40796651629"
 
 
 @dataclass
@@ -212,7 +229,7 @@ class Cloudpickle6220b0ce(PythonProfile):
 
 
 @dataclass
-class ColorlogDfa10f59(PythonProfile):
+class PythonColorlogDfa10f59(PythonProfile):
     owner: str = "borntyping"
     repo: str = "python-colorlog"
     commit: str = "dfa10f59186d3d716aec4165ee79e58f2265c0eb"
@@ -271,7 +288,7 @@ class Dominate9082227e(PythonProfile):
 
 
 @dataclass
-class Dotenv2b8635b7(PythonProfile):
+class PythonDotenv2b8635b7(PythonProfile):
     owner: str = "theskumar"
     repo: str = "python-dotenv"
     commit: str = "2b8635b79f1aa15cade0950117d4e7d12c298766"
@@ -384,7 +401,11 @@ class Gpxpy09fc46b3(PythonProfile):
     owner: str = "tkrajina"
     repo: str = "gpxpy"
     commit: str = "09fc46b3cad16b5bf49edf8e7ae873794a959620"
-    test_cmd: str = "pytest test.py --verbose --color=no --tb=no --disable-warnings"
+    test_cmd: str = (
+        "source /opt/miniconda3/bin/activate; "
+        f"conda activate {ENV_NAME}; "
+        "pytest test.py --verbose --color=no --tb=no --disable-warnings"
+    )
 
 
 @dataclass
@@ -463,7 +484,11 @@ class JaxEbd90e06f(PythonProfile):
     repo: str = "jax"
     commit: str = "ebd90e06fa7caad087e2342431e3899cfd2fdf98"
     install_cmds: list = field(default_factory=lambda: ['pip install -e ".[cpu]"'])
-    test_cmd: str = "pytest --disable-warnings --color=no --tb=no --verbose -n auto"
+    test_cmd: str = (
+        "source /opt/miniconda3/bin/activate; "
+        f"conda activate {ENV_NAME}; "
+        "pytest --disable-warnings --color=no --tb=no --verbose -n auto"
+    )
     min_testing: bool = True
     min_pregold: bool = True
 
@@ -497,7 +522,7 @@ class LineProfilerA646bf0f(PythonProfile):
 
 
 @dataclass
-class Markdownify6258f5c3(PythonProfile):
+class PythonMarkdownify6258f5c3(PythonProfile):
     owner: str = "matthewwithanm"
     repo: str = "python-markdownify"
     commit: str = "6258f5c38b97ab443b4ddf03e6676ce29b392d06"
@@ -522,7 +547,22 @@ class MidoA0158ff9(PythonProfile):
     owner: str = "mido"
     repo: str = "mido"
     commit: str = "a0158ff95a08f9a4eef628a2e7c793fd3a466640"
-    test_cmd = "pytest --disable-warnings --color=no --tb=no --verbose -rs -c /dev/null"
+    test_cmd: str = (
+        "source /opt/miniconda3/bin/activate; "
+        f"conda activate {ENV_NAME}; "
+        "pytest --disable-warnings --color=no --tb=no --verbose -rs -c /dev/null"
+    )
+
+    def get_test_files(self, instance: dict) -> list[str]:
+        f2p_files, p2p_files = super().get_test_files(instance)
+        prefix = "../dev/"
+        _helper = (
+            lambda test_file: test_file[len(prefix) :]
+            if test_file.startswith(prefix)
+            else test_file
+        )
+        remove_prefix = lambda test_files: sorted(list(set(map(_helper, test_files))))
+        return remove_prefix(f2p_files), remove_prefix(p2p_files)
 
 
 @dataclass
@@ -554,7 +594,11 @@ class Paramiko23f92003(PythonProfile):
     owner: str = "paramiko"
     repo: str = "paramiko"
     commit: str = "23f92003898b060df0e2b8b1d889455264e63a3e"
-    test_cmd = "pytest -rA --color=no --disable-warnings"
+    test_cmd: str = (
+        "source /opt/miniconda3/bin/activate; "
+        f"conda activate {ENV_NAME}; "
+        "pytest -rA --color=no --disable-warnings"
+    )
 
     def log_parser(self, log: str) -> dict[str, str]:
         test_status_map = {}
@@ -755,7 +799,14 @@ class PythonSlugify872b3750(PythonProfile):
     owner: str = "un33k"
     repo: str = "python-slugify"
     commit: str = "872b37509399a7f02e53f46ad9881f63f66d334b"
-    test_cmd = "python test.py --verbose"
+    test_cmd: str = (
+        "source /opt/miniconda3/bin/activate; "
+        f"conda activate {ENV_NAME}; "
+        "python test.py --verbose"
+    )
+
+    def get_test_files(self, instance: dict) -> list[str]:
+        return ["test.py"], ["test.py"]
 
     def log_parser(self, log: str) -> dict[str, str]:
         test_status_map = {}
@@ -887,7 +938,7 @@ class StarletteDb5063c2(PythonProfile):
 
 
 @dataclass
-class StringSimilarity115acaac(PythonProfile):
+class PythonStringSimilarity115acaac(PythonProfile):
     owner: str = "luozhouyang"
     repo: str = "python-string-similarity"
     commit: str = "115acaacf926b41a15664bd34e763d074682bda3"
@@ -898,9 +949,16 @@ class SunpyF8edfd5c(PythonProfile):
     owner: str = "sunpy"
     repo: str = "sunpy"
     commit: str = "f8edfd5c4be873fbd28dec4583e7f737a045f546"
-    python_version = "3.11"
+    python_version: str = "3.11"
     install_cmds: list = field(default_factory=lambda: ['pip install -e ".[dev]"'])
     min_testing: bool = True
+
+
+@dataclass
+class Dspy651a4c71(PythonProfile):
+    owner: str = "stanfordnlp"
+    repo: str = "dspy"
+    commit: str = "651a4c715ecc6c5e68b68d22172768f0b20f2eea"
 
 
 @dataclass
@@ -908,7 +966,6 @@ class Sympy2ab64612(PythonProfile):
     owner: str = "sympy"
     repo: str = "sympy"
     commit: str = "2ab64612efb287f09822419f4127878a4b664f71"
-    install_cmds: list = field(default_factory=lambda: ["pip install -e ."])
     min_testing: bool = True
     min_pregold: bool = True
 
@@ -978,7 +1035,25 @@ class TornadoD5ac65c1(PythonProfile):
     owner: str = "tornadoweb"
     repo: str = "tornado"
     commit: str = "d5ac65c1f1453c2aeddd089d8e68c159645c13e1"
-    test_cmd = "python -m tornado.test --verbose"
+    test_cmd: str = (
+        "source /opt/miniconda3/bin/activate; "
+        f"conda activate {ENV_NAME}; "
+        "python -m tornado.test --verbose"
+    )
+
+    def get_test_files(self, instance: dict) -> list[str]:
+        f2p_files = set()
+        p2p_files = set()
+        for i, j in (
+            (PASS_TO_PASS, p2p_files),
+            (FAIL_TO_PASS, f2p_files),
+        ):
+            for test_name in instance[i]:
+                is_match = re.search(r"\s\((.*)\)", test_name)
+                if is_match:
+                    test_path = is_match.group(1)
+                    j.add("/".join(test_path.split(".")[:-1]) + ".py")
+        return list(f2p_files), list(p2p_files)
 
     def log_parser(self, log: str) -> dict[str, str]:
         test_status_map = {}
@@ -1087,20 +1162,25 @@ class MypyE93f06ce(PythonProfile):
             "hash -r",
         ]
     )
-    test_cmd = "pytest --color=no -rA -k"
+    test_cmd: str = (
+        "source /opt/miniconda3/bin/activate; "
+        f"conda activate {ENV_NAME}; "
+        "pytest --color=no -rA -k"
+    )
     min_testing: bool = True
 
-    def get_test_cmd(self, instance: str) -> tuple[str, list]:
-        pattern = r"\[case ([^\]]+)\]"
-        if FAIL_TO_PASS in instance:
-            test_keys = " or ".join(
-                [x.rsplit("::", 1)[-1] for x in instance[FAIL_TO_PASS]]
-            )
+    def get_test_cmd(self, instance: str, f2p_only: bool = False) -> tuple[str, list]:
+        test_keys = []
+        if f2p_only and FAIL_TO_PASS in instance:
+            test_keys = [x.rsplit("::", 1)[-1] for x in instance[FAIL_TO_PASS]]
         elif INSTANCE_REF in instance and "test_patch" in instance[INSTANCE_REF]:
-            test_keys = " or ".join(
-                re.findall(pattern, instance[INSTANCE_REF]["test_patch"])
+            test_keys = re.findall(
+                r"\[case ([^\]]+)\]", instance[INSTANCE_REF]["test_patch"]
             )
-        return f'{self.test_cmd} "{test_keys}"'
+        if len(test_keys) > 1:
+            combined = " or ".join(test_keys)
+            return f'{self.test_cmd} "{combined}"', test_keys
+        return self.test_cmd, test_keys
 
     def log_parser(self, log: str) -> dict[str, str]:
         test_status_map = {}
@@ -1129,7 +1209,11 @@ class MONAIa09c1f08(PythonProfile):
             "python -m pip install -e .",
         ]
     )
-    test_cmd = "pytest --disable-warnings --color=no --tb=no --verbose"
+    test_cmd: str = (
+        "source /opt/miniconda3/bin/activate; "
+        f"conda activate {ENV_NAME}; "
+        "pytest --disable-warnings --color=no --tb=no --verbose"
+    )
     min_pregold: bool = True
     min_testing: bool = True
 
@@ -1154,7 +1238,6 @@ class Hydra0f03eb60(PythonProfile):
             "pip install -e .",
         ]
     )
-    min_testing: bool = True
 
 
 @dataclass
@@ -1195,7 +1278,7 @@ class PydanticAcb0f10f(PythonProfile):
             "make install",
         ]
     )
-    test_cmd = (
+    test_cmd: str = (
         "/root/.local/bin/uv run pytest --disable-warnings --color=no --tb=no --verbose"
     )
 
@@ -1243,6 +1326,20 @@ class MonkeyType70c3acf6(PythonProfile):
     commit: str = "70c3acf62950be5dfb28743c7a719bfdecebcd84"
 
 
+@dataclass
+class String2Stringc4a72f59(PythonProfile):
+    owner: str = "stanfordnlp"
+    repo: str = "string2string"
+    commit: str = "c4a72f59aafe8db42c4015709078064535dc4191"
+    install_cmds: list = field(
+        default_factory=lambda: [
+            "pip install -r docs/requirements.txt",
+            "pip install -e .",
+            "pip install pytest",
+        ]
+    )
+
+
 # Register all Python profiles with the global registry
 for name, obj in list(globals().items()):
     if (
@@ -1250,4 +1347,4 @@ for name, obj in list(globals().items()):
         and issubclass(obj, PythonProfile)
         and obj.__name__ != "PythonProfile"
     ):
-        global_registry.register_profile(obj)
+        registry.register_profile(obj)

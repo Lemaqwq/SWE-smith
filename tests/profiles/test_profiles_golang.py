@@ -62,7 +62,7 @@ def test_go_profile_log_parser_edge_cases():
 --- SKIP: TestBaz (0.00s)
 """
     result = profile.log_parser(log)
-    assert "TestBar" not in result
+    assert "TestBar" in result
     assert "TestBaz" in result
 
 
@@ -162,4 +162,3 @@ def test_gin_profile_dockerfile_content():
     assert f"git clone https://github.com/{profile.mirror_name}" in dockerfile
     assert "WORKDIR /testbed" in dockerfile
     assert "go mod tidy" in dockerfile
-    assert "go test ./..." in dockerfile

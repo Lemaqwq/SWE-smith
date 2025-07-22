@@ -2,7 +2,7 @@ import re
 import warnings
 
 from swesmith.constants import CodeEntity, TODO_REWRITE
-from tree_sitter import Language, Parser, Query
+from tree_sitter import Language, Parser, Query, QueryCursor
 import tree_sitter_java as tsjava
 
 JAVA_LANGUAGE = Language(tsjava.language())
@@ -36,7 +36,7 @@ class JavaEntity(CodeEntity):
             ]
             """.strip(),
         )
-        matches = body_query.matches(self.node)
+        matches = QueryCursor(body_query).matches(self.node)
         if matches:
             body_node = matches[0][1]["body"][0]
             signature = (
@@ -57,7 +57,7 @@ class JavaEntity(CodeEntity):
     @staticmethod
     def _extract_text_from_first_match(query, node, capture_name: str) -> str | None:
         """Extract text from tree-sitter query matches with None fallback."""
-        matches = query.matches(node)
+        matches = QueryCursor(query).matches(node)
         return matches[0][1][capture_name][0].text.decode("utf-8") if matches else None
 
 
@@ -65,7 +65,7 @@ def get_entities_from_file_java(
     entities: list[JavaEntity],
     file_path: str,
     max_entities: int = -1,
-) -> list[JavaEntity]:
+) -> None:
     """
     Parse a .java file and return up to max_entities top-level funcs and types.
     If max_entities < 0, collects them all.
@@ -77,7 +77,7 @@ def get_entities_from_file_java(
     root = tree.root_node
     lines = file_content.splitlines()
 
-    def walk(node):
+    def walk(node) -> None:
         # stop if we've hit the limit
         if 0 <= max_entities == len(entities):
             return
@@ -112,9 +112,9 @@ def _has_body(node) -> bool:
     return False
 
 
-def _build_entity(node, lines, file_path: str) -> CodeEntity:
+def _build_entity(node, lines, file_path: str) -> JavaEntity:
     """
-    Turn a Tree-sitter node into CodeEntity.
+    Turns a Tree-sitter node into a JavaEntity object.
     """
     # start_point/end_point are (row, col) zero-based
     start_row, _ = node.start_point

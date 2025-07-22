@@ -25,9 +25,7 @@ This produces a `logs/bug_gen/<repo>_all_patches.json` file with all the candida
 2. Run validation
 
 ```bash
-python -m swesmith.harness.valid \
-    logs/bug_gen/<repo>_all_patches.json \
-    --run_id <run_id>
+python -m swesmith.harness.valid logs/bug_gen/<repo>_all_patches.json
 ```
 
 The validation harness works in two steps.
@@ -61,9 +59,7 @@ This script performs two actions:
     "patch": <The diff that, when applied, creates the bug>,
     "FAIL_TO_PASS": <List of broken test cases>,
     "PASS_TO_PASS": <List of passing test cases>,
-    "created_at": <timestamp>,
     "image_name": <docker image name>,
-    "base_commit": <base commit hash>,
 }
 ```
 * For each valid task instance, a branch called `<instance_id>` is created in the repository. The branch corresponds to the repository with the task instance's bug patch applied.

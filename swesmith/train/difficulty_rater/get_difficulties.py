@@ -16,7 +16,6 @@ import os
 from collections import Counter
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from swebench.harness.constants import KEY_INSTANCE_ID
-from swesmith.constants import SGLANG_API_KEY
 from swesmith.train.difficulty_rater.create_datasets import (
     PROMPT_SYSTEM,
     PROMPT_INSTANCE,
@@ -50,13 +49,15 @@ def process_instance(client, instance):
 
 
 def main(base_url, dataset_path, overwrite=False):
-    client = openai.Client(base_url=f"{base_url}/v1", api_key=SGLANG_API_KEY)
+    client = openai.Client(base_url=f"{base_url}/v1", api_key="swesmith")
 
     dataset = None
     if dataset_path.endswith(".json"):
-        dataset = json.load(open(dataset_path))
+        with open(dataset_path) as f:
+            dataset = json.load(f)
     elif dataset_path.endswith(".jsonl"):
-        dataset = [json.loads(line) for line in open(dataset_path).readlines()]
+        with open(dataset_path) as f:
+            dataset = [json.loads(line) for line in f.readlines()]
 
     ext = ".json" if dataset_path.endswith(".json") else ".jsonl"
     difficulties_path = dataset_path.replace(ext, "_difficulties.jsonl")
@@ -65,10 +66,11 @@ def main(base_url, dataset_path, overwrite=False):
     completed = []
     mode = "w"
     if os.path.exists(difficulties_path) and not overwrite:
-        for line in open(difficulties_path).readlines():
-            line = json.loads(line)
-            id_to_diff[line[KEY_INSTANCE_ID]] = line["difficulty"]
-            completed.append(line[KEY_INSTANCE_ID])
+        with open(difficulties_path) as f:
+            for line in f.readlines():
+                line = json.loads(line)
+                id_to_diff[line[KEY_INSTANCE_ID]] = line["difficulty"]
+                completed.append(line[KEY_INSTANCE_ID])
         print(f"Skipping {len(completed)} completed instances")
         dataset = [x for x in dataset if x[KEY_INSTANCE_ID] not in completed]
         mode = "a"

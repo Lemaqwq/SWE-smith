@@ -1,11 +1,12 @@
 import pytest
+from swesmith.constants import ENV_NAME
 from unittest.mock import patch, MagicMock, mock_open
 from pathlib import Path
 
 # Mock docker import
 with patch("docker.from_env", return_value=MagicMock()):
     from swesmith.profiles.python import PythonProfile, Addict75284f95, AutogradAc044f0d
-    from swesmith.profiles import global_registry
+    from swesmith.profiles import registry
 
 
 def test_python_profile_defaults():
@@ -14,7 +15,11 @@ def test_python_profile_defaults():
 
     assert profile.python_version == "3.10"
     assert profile.install_cmds == ["python -m pip install -e ."]
-    assert profile.test_cmd == "pytest --disable-warnings --color=no --tb=no --verbose"
+    assert profile.test_cmd == (
+        "source /opt/miniconda3/bin/activate; "
+        f"conda activate {ENV_NAME}; "
+        "pytest --disable-warnings --color=no --tb=no --verbose"
+    )
 
 
 def test_python_profile_build_image():
@@ -138,8 +143,11 @@ def test_python_profile_custom_test_cmd():
     from swesmith.profiles.python import Gpxpy09fc46b3
 
     profile = Gpxpy09fc46b3()
-    expected_cmd = "pytest test.py --verbose --color=no --tb=no --disable-warnings"
-    assert profile.test_cmd == expected_cmd
+    assert profile.test_cmd == (
+        "source /opt/miniconda3/bin/activate; "
+        f"conda activate {ENV_NAME}; "
+        "pytest test.py --verbose --color=no --tb=no --disable-warnings"
+    )
     assert profile.test_cmd != PythonProfile().test_cmd
 
 
@@ -182,7 +190,7 @@ def test_python_profile_registry_integration():
     ]
 
     for key in python_profile_keys:
-        profile = global_registry.get(key)
+        profile = registry.get(key)
         assert profile is not None
         assert isinstance(profile, PythonProfile)
 

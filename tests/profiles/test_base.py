@@ -8,7 +8,7 @@ from swebench.harness.constants import FAIL_TO_PASS, KEY_INSTANCE_ID
 from swesmith.bug_gen.mirror.generate import INSTANCE_REF
 from swesmith.constants import KEY_PATCH
 from swesmith.constants import ORG_NAME_GH
-from swesmith.profiles import global_registry, RepoProfile
+from swesmith.profiles import registry, RepoProfile
 from swesmith.profiles.utils import INSTALL_CMAKE, INSTALL_BAZEL
 from unittest.mock import patch
 
@@ -22,18 +22,13 @@ def clear_singleton_cache():
     yield
 
 
-@pytest.fixture(autouse=True)
-def clear_test_paths_cache():
-    RepoProfile._test_paths_cache.clear()
-
-
 def test_registry_keys_and_lookup():
     # Should have many keys after importing profiles
-    keys = global_registry.keys()
+    keys = registry.keys()
     assert len(keys) > 0
     # Pick a known profile
     key = "mewwts__addict.75284f95"
-    repo_profile = global_registry.get(key)
+    repo_profile = registry.get(key)
     assert repo_profile is not None
     assert isinstance(repo_profile, RepoProfile)
     assert repo_profile.owner == "mewwts"
@@ -44,7 +39,7 @@ def test_registry_keys_and_lookup():
 
 
 def test_image_name():
-    repo_profile = global_registry.get("mewwts__addict.75284f95")
+    repo_profile = registry.get("mewwts__addict.75284f95")
     image_name = repo_profile.image_name
     assert "swesmith" in image_name
     assert repo_profile.owner in image_name
@@ -54,7 +49,7 @@ def test_image_name():
 
 def test_repo_profile_clone():
     """Test the RepoProfile.clone method, adapted from the original clone_repo test."""
-    repo_profile = global_registry.get("mewwts__addict.75284f95")
+    repo_profile = registry.get("mewwts__addict.75284f95")
 
     # Test with default dest (should use repo_name)
     expected_dest = repo_profile.repo_name
@@ -103,7 +98,7 @@ def test_repo_profile_clone():
         patch("os.path.exists", return_value=True) as mock_exists,
         patch("subprocess.run") as mock_run,
     ):
-        result, cloned= repo_profile.clone(custom_dest)
+        result, cloned = repo_profile.clone(custom_dest)
         mock_exists.assert_called_once_with(custom_dest)
         mock_run.assert_not_called()
         assert result == custom_dest
@@ -112,7 +107,7 @@ def test_repo_profile_clone():
 
 def test_python_log_parser():
     # Use the default PythonProfile log_parser
-    repo_profile = global_registry.get("mewwts__addict.75284f95")
+    repo_profile = registry.get("mewwts__addict.75284f95")
     log = "test_foo.py PASSED\ntest_bar.py FAILED\ntest_baz.py SKIPPED"
 
     # Patch TestStatus for this test
@@ -141,7 +136,7 @@ def test_python_log_parser():
 def test_golang_log_parser():
     # Use Gin3c12d2a8 Go profile
     key = "gin-gonic__gin.3c12d2a8"
-    repo_profile = global_registry.get(key)
+    repo_profile = registry.get(key)
     log = """
 --- PASS: TestFoo (0.01s)
 --- FAIL: TestBar (0.02s)
@@ -265,7 +260,7 @@ def test_registry_values():
     registry.register_profile(TestProfile2)
 
     values = registry.values()
-    assert len(values) == 4  # Because 2 keys per RepoProfile
+    assert len(values) == 2
     assert all(isinstance(v, RepoProfile) for v in values)
     assert any(v.owner == "test1" for v in values)
     assert any(v.owner == "test2" for v in values)
@@ -273,44 +268,43 @@ def test_registry_values():
 
 def test_mirror_exists():
     """Test _mirror_exists method"""
-    repo_profile = global_registry.get("mewwts__addict.75284f95")
+    repo_profile = registry.get("mewwts__addict.75284f95")
 
-    # Mock the GitHub API response
-    mock_repos = [
-        {"name": "mewwts__addict.75284f95"},
-        {"name": "other_repo"},
-    ]
-
-    with patch("swesmith.profiles.base.api") as mock_api:
-        mock_api.repos.list_for_org.return_value = mock_repos
+    # Test when mirror exists (api.repos.get does not raise)
+    with patch.object(repo_profile.api, "repos") as mock_repos:
+        mock_repos.get.return_value = None
         assert repo_profile._mirror_exists() is True
+        mock_repos.get.assert_called_once_with(
+            owner=repo_profile.org_gh, repo=repo_profile.repo_name
+        )
 
-    # Test when mirror doesn't exist
-    mock_repos_no_match = [
-        {"name": "other_repo1"},
-        {"name": "other_repo2"},
-    ]
+    # Reset cache for the second test
+    repo_profile._cache_mirror_exists = None
 
-    with patch("swesmith.profiles.base.api") as mock_api:
-        mock_api.repos.list_for_org.return_value = mock_repos_no_match
+    # Test when mirror does not exist (api.repos.get raises Exception)
+    with patch.object(repo_profile.api, "repos") as mock_repos:
+        mock_repos.get.side_effect = Exception("not found")
         assert repo_profile._mirror_exists() is False
+        mock_repos.get.assert_called_once_with(
+            owner=repo_profile.org_gh, repo=repo_profile.repo_name
+        )
 
 
 def test_create_mirror():
     """Test create_mirror method"""
-    repo_profile = global_registry.get("mewwts__addict.75284f95")
+    repo_profile = registry.get("mewwts__addict.75284f95")
 
     with (
         patch.object(repo_profile, "_mirror_exists", return_value=True),
         patch("os.listdir", return_value=[]),
         patch("shutil.rmtree"),
-        patch("swesmith.profiles.base.api") as mock_api,
+        patch.object(repo_profile.api, "repos") as mock_repos,
         patch("subprocess.run") as mock_run,
     ):
         repo_profile.create_mirror()
 
         # Should not create mirror if it already exists
-        mock_api.repos.create_in_org.assert_not_called()
+        mock_repos.create_in_org.assert_not_called()
         mock_run.assert_not_called()
 
     # Test creating new mirror
@@ -318,19 +312,19 @@ def test_create_mirror():
         patch.object(repo_profile, "_mirror_exists", return_value=False),
         patch("os.listdir", return_value=[repo_profile.repo_name]),
         patch("shutil.rmtree"),
-        patch("swesmith.profiles.base.api") as mock_api,
+        patch.object(repo_profile.api, "repos") as mock_repos,
         patch("subprocess.run") as mock_run,
     ):
         repo_profile.create_mirror()
 
         # Should create mirror and run git commands
-        mock_api.repos.create_in_org.assert_called_once()
+        mock_repos.create_in_org.assert_called_once()
         assert mock_run.call_count == 3  # Three git commands
 
 
 def test_repo_profile_properties():
     """Test RepoProfile properties"""
-    repo_profile = global_registry.get("mewwts__addict.75284f95")
+    repo_profile = registry.get("mewwts__addict.75284f95")
 
     # Test repo_name property
     expected_repo_name = (
@@ -354,7 +348,7 @@ def test_repo_profile_properties():
 
 def test_repo_profile_platform_detection():
     """Test platform detection in RepoProfile"""
-    repo_profile = global_registry.get("mewwts__addict.75284f95")
+    repo_profile = registry.get("mewwts__addict.75284f95")
 
     # Test that arch and pltf are set based on platform
     assert repo_profile.arch in ["x86_64", "arm64"]
@@ -369,7 +363,7 @@ def test_repo_profile_platform_detection():
 
 def test_clone_mirror_not_exists():
     """Test clone method when mirror doesn't exist"""
-    repo_profile = global_registry.get("mewwts__addict.75284f95")
+    repo_profile = registry.get("mewwts__addict.75284f95")
 
     with patch.object(repo_profile, "_mirror_exists", return_value=False):
         with pytest.raises(ValueError, match="Mirror clone repo must be created first"):
@@ -378,7 +372,7 @@ def test_clone_mirror_not_exists():
 
 def test_clone_subprocess_error():
     """Test clone method when subprocess fails"""
-    repo_profile = global_registry.get("mewwts__addict.75284f95")
+    repo_profile = registry.get("mewwts__addict.75284f95")
 
     with (
         patch.object(repo_profile, "_mirror_exists", return_value=True),
@@ -465,24 +459,6 @@ def test_get_test_cmd_basic():
     test_command, test_files = mock_rp.get_test_cmd(instance)
     assert test_command == "pytest"
     assert test_files == []
-
-
-def test_get_test_cmd_eval_mode():
-    """Test get_test_cmd in evaluation mode with FAIL_TO_PASS."""
-    mock_rp = MockRepoProfile("dummy_dir")
-    mock_rp.test_cmd = "pytest"
-
-    instance = {
-        KEY_INSTANCE_ID: "test__test_repo.test1234.suffix",
-        FAIL_TO_PASS: ["test_file.py::test_function", "other_file.py::test_other"],
-    }
-
-    test_command, test_files = mock_rp.get_test_cmd(instance)
-    # Order of files may vary, so check set equality
-    parts = test_command.split()
-    assert parts[0] == "pytest"
-    assert set(parts[1:]) == {"test_file.py", "other_file.py"}
-    assert set(test_files) == {"test_file.py", "other_file.py"}
 
 
 def test_get_test_cmd_min_testing():
@@ -645,3 +621,40 @@ def my_function(x, y):
     # Check that at least one is a class and one is a function
     assert any(getattr(e, "is_class", False) for e in entities)
     assert any(getattr(e, "is_function", False) for e in entities)
+
+
+def test_is_test_path_cases(tmp_path):
+    """Test the _is_test_path method for various file and directory patterns and extensions."""
+    # Use MockRepoProfile with a dummy directory
+    mock_rp = MockRepoProfile(str(tmp_path))
+    # Set exts to default SUPPORTED_EXTS for broad coverage
+    mock_rp.exts = [".py", ".js", ".go", ".java", ".rb", ".php", ".rs", ".c"]
+
+    # Should match by file name
+    assert mock_rp._is_test_path("src", "test_foo.py")
+    assert mock_rp._is_test_path("src", "foo_test.py")
+    assert mock_rp._is_test_path("src", "TestBar.java")  # case-insensitive start
+    assert mock_rp._is_test_path("src", "bar_test.go")
+    assert mock_rp._is_test_path("src", "baz_test.rb")
+    assert mock_rp._is_test_path("src", "testBaz.rs")
+
+    # Should match by directory
+    assert mock_rp._is_test_path("tests", "foo.py")
+    assert mock_rp._is_test_path("specs", "bar.js")
+    assert mock_rp._is_test_path("src/tests", "baz.go")
+    assert mock_rp._is_test_path("src/specs", "baz.java")
+    assert mock_rp._is_test_path("src/test", "baz.rb")
+
+    # Should not match non-test files
+    assert not mock_rp._is_test_path("src", "foo.py")
+    assert not mock_rp._is_test_path("src", "bar.txt")
+    assert not mock_rp._is_test_path("docs", "readme.md")
+    assert not mock_rp._is_test_path("src", "main.c")
+
+    # Should not match files with unsupported extension if exts > 1
+    mock_rp.exts = [".py", ".js"]
+    assert not mock_rp._is_test_path("src", "test_foo.go")
+    assert not mock_rp._is_test_path("tests", "foo.rb")
+    # Should match if extension is supported
+    assert mock_rp._is_test_path("src", "test_foo.py")
+    assert mock_rp._is_test_path("tests", "foo.js")

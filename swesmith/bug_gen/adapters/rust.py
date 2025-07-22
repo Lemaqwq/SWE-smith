@@ -3,7 +3,7 @@ import tree_sitter_rust as tsrs
 import warnings
 
 from swesmith.constants import TODO_REWRITE, CodeEntity
-from tree_sitter import Language, Parser, Query
+from tree_sitter import Language, Parser, Query, QueryCursor
 
 RUST_LANGUAGE = Language(tsrs.language())
 
@@ -20,7 +20,7 @@ class RustEntity(CodeEntity):
     @property
     def signature(self) -> str:
         body_query = Query(RUST_LANGUAGE, "(function_item body: (block) @body)")
-        matches = body_query.matches(self.node)
+        matches = QueryCursor(body_query).matches(self.node)
         if matches:
             body_node = matches[0][1]["body"][0]
             body_start_byte = body_node.start_byte - self.node.start_byte
@@ -38,7 +38,7 @@ class RustEntity(CodeEntity):
     @staticmethod
     def _extract_text_from_first_match(query, node, capture_name: str) -> str | None:
         """Extract text from tree-sitter query matches with None fallback."""
-        matches = query.matches(node)
+        matches = QueryCursor(query).matches(node)
         return matches[0][1][capture_name][0].text.decode("utf-8") if matches else None
 
 
@@ -46,7 +46,7 @@ def get_entities_from_file_rs(
     entities: list[RustEntity],
     file_path: str,
     max_entities: int = -1,
-) -> list[RustEntity]:
+) -> None:
     """
     Parse a .rs file and return up to max_entities top-level funcs and types.
     If max_entities < 0, collects them all.
@@ -58,7 +58,7 @@ def get_entities_from_file_rs(
     root = tree.root_node
     lines = file_content.splitlines()
 
-    def walk(node):
+    def walk(node) -> None:
         # stop if we've hit the limit
         if 0 <= max_entities == len(entities):
             return
@@ -90,9 +90,9 @@ def _has_test_attribute(node) -> bool:
     return False
 
 
-def _build_entity(node, lines, file_path: str) -> CodeEntity:
+def _build_entity(node, lines, file_path: str) -> RustEntity:
     """
-    Turn a Tree-sitter node into CodeEntity.
+    Turns a Tree-sitter node into a RustEntity object.
     """
     # start_point/end_point are (row, col) zero-based
     start_row, _ = node.start_point
