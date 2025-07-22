@@ -218,24 +218,7 @@ def _walk_and_collect_ts(node, entities, lines, file_path, max_entities):
     if node.type == "ERROR":
         warnings.warn(f"Error encountered parsing {file_path}", stacklevel=2)
         return
-    # Only collect classes, functions, and methods (not variables)
-    if node.type == "export_statement":
-        for child in node.children:
-            if child.type in [
-                "function_declaration",
-                "method_definition",
-                "class_declaration",
-            ]:
-                entity = _build_entity(child, lines, file_path)
-                if entity.name.strip() and entity.signature.strip():
-                    entities.append(entity)
-                    if 0 <= max_entities == len(entities):
-                        return
-                _walk_and_collect_ts(child, entities, lines, file_path, max_entities)
-            else:
-                _walk_and_collect_ts(child, entities, lines, file_path, max_entities)
-        return
-    elif node.type in [
+    if node.type in [
         "function_declaration",
         "method_definition",
         "class_declaration",

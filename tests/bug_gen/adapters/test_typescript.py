@@ -10,8 +10,7 @@ def entities(test_file_ts):
 
 
 def test_get_entities_from_file_ts_count(entities):
-    """Test that we find a reasonable number of entities in buffer.ts."""
-    # Should find the class and many methods (at least 10)
+    """Test that we find all entities in buffer.ts."""
     assert len(entities) == 30
 
 
@@ -67,7 +66,8 @@ def test_get_entities_from_file_ts_stubs(entities):
 def test_get_entities_from_file_ts_complexity(entities):
     """Test that complexity is always >= 1 for all methods."""
     for e in entities:
-        assert e.complexity >= 1
+        print(e.complexity)
+    assert all(e.complexity == 1 for e in entities)
 
 
 def test_get_entities_from_file_ts_exact(entities):
