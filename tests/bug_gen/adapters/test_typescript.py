@@ -111,7 +111,7 @@ def test_get_entities_from_file_ts_exact(entities):
         ("_allocQueue", "_allocQueue()", 70, 84),
         (
             "_pushQueue",
-            "_pushQueue(\n  char: number,\n  repeat: number,\n  line: number | undefined,\n  column: number | undefined,\n  filename: string | undefined,\n) {\n  const cu",
+            "_pushQueue(\n  char: number,\n  repeat: number,\n  line: number | undefined,\n  column: number | undefined,\n  filename: string | undefined,\n)",
             86,
             105,
         ),
@@ -129,19 +129,19 @@ def test_get_entities_from_file_ts_exact(entities):
         ("_flush", "_flush(): void", 206, 214),
         (
             "_appendChar",
-            "_appendChar(\n  char: number,\n  repeat: number,\n  sourcePos: InternalSourcePos,\n): void {\n  this",
+            "_appendChar(\n  char: number,\n  repeat: number,\n  sourcePos: InternalSourcePos,\n): void",
             216,
             256,
         ),
         (
             "_append",
-            "_append(\n  str: string,\n  sourcePos: InternalSourcePos,\n  maybeNewline: boolean,\n): void {\n  cons",
+            "_append(\n  str: string,\n  sourcePos: InternalSourcePos,\n  maybeNewline: boolean,\n): void",
             258,
             322,
         ),
         (
             "_mark",
-            "_mark(\n  line: number | undefined,\n  column: number | undefined,\n  identifierName: string | undefined,\n  identifierNamePos: Pos | undefined,\n  filename: string | undefined,\n): void {\n  this._ma",
+            "_mark(\n  line: number | undefined,\n  column: number | undefined,\n  identifierName: string | undefined,\n  identifierNamePos: Pos | undefined,\n  filename: string | undefined,\n): void",
             324,
             339,
         ),
@@ -160,7 +160,7 @@ def test_get_entities_from_file_ts_exact(entities):
         ),
         (
             "sourceWithOffset",
-            'sourceWithOffset(\n  prop: "start" | "end",\n  loc: Loc | undefined,\n  columnOffset: number,\n): void {\n  if (',
+            'sourceWithOffset(\n  prop: "start" | "end",\n  loc: Loc | undefined,\n  columnOffset: number,\n): void',
             469,
             477,
         ),
