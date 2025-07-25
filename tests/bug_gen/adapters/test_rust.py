@@ -9,9 +9,9 @@ from swesmith.constants import CodeProperty
 
 
 @pytest.fixture
-def entities(test_file_rust):
+def entities(test_file_rust_reqwest):
     entities = []
-    get_entities_from_file_rs(entities, test_file_rust)
+    get_entities_from_file_rs(entities, test_file_rust_reqwest)
     return entities
 
 
@@ -19,9 +19,9 @@ def test_get_entities_from_file_rs_count(entities):
     assert len(entities) == 19
 
 
-def test_get_entities_from_file_rs_max(test_file_rust):
+def test_get_entities_from_file_rs_max(test_file_rust_reqwest):
     entities = []
-    get_entities_from_file_rs(entities, test_file_rust, 3)
+    get_entities_from_file_rs(entities, test_file_rust_reqwest, 3)
     assert len(entities) == 3
 
 
@@ -127,8 +127,8 @@ def test_get_entities_from_file_rs_extensions(entities):
     )
 
 
-def test_get_entities_from_file_rs_file_paths(entities, test_file_rust):
-    assert all([e.file_path == test_file_rust for e in entities]), (
+def test_get_entities_from_file_rs_file_paths(entities, test_file_rust_reqwest):
+    assert all([e.file_path == test_file_rust_reqwest for e in entities]), (
         "All entities should have the correct file path"
     )
 

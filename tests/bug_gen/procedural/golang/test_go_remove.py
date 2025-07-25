@@ -4,16 +4,12 @@ from swesmith.bug_gen.procedural.golang.remove import (
     RemoveConditionalModifier,
     RemoveAssignModifier,
 )
-import random
 
 
 def test_remove_loop(test_file_go_caddy_listeners):
     entities = []
     get_entities_from_file_go(entities, test_file_go_caddy_listeners)
     pm = RemoveLoopModifier(likelihood=1.0)
-
-    # Set a fixed random seed for reproducible test results
-    pm.rand = random.Random(42)
 
     entities = [x for x in entities if pm.can_change(x)]
     assert len(entities) == 4
@@ -29,9 +25,6 @@ def test_remove_conditional(test_file_go_caddy_listeners):
     get_entities_from_file_go(entities, test_file_go_caddy_listeners)
     pm = RemoveConditionalModifier(likelihood=1.0)
 
-    # Set a fixed random seed for reproducible test results
-    pm.rand = random.Random(42)
-
     entities = [x for x in entities if pm.can_change(x)]
     assert len(entities) == 16
 
@@ -45,9 +38,6 @@ def test_remove_assign(test_file_go_caddy_listeners):
     entities = []
     get_entities_from_file_go(entities, test_file_go_caddy_listeners)
     pm = RemoveAssignModifier(likelihood=1.0)
-
-    # Set a fixed random seed for reproducible test results
-    pm.rand = random.Random(42)
 
     entities = [x for x in entities if pm.can_change(x)]
     assert len(entities) == 14

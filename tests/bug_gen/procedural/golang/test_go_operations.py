@@ -6,7 +6,6 @@ from swesmith.bug_gen.procedural.golang.operations import (
     OperationBreakChainsModifier,
     OperationChangeConstantsModifier,
 )
-import random
 
 
 def test_operation_change(test_file_go_caddy_listeners):
@@ -14,9 +13,6 @@ def test_operation_change(test_file_go_caddy_listeners):
     entities = []
     get_entities_from_file_go(entities, test_file_go_caddy_listeners)
     pm = OperationChangeModifier(likelihood=1.0)
-
-    # Set a fixed random seed for reproducible test results
-    pm.rand = random.Random(42)
 
     entities = [x for x in entities if pm.can_change(x)]
     assert len(entities) == 17
@@ -36,7 +32,7 @@ def test_operation_change(test_file_go_caddy_listeners):
     assert modified.rewrite != test_entity.src_code
     assert (
         modified.rewrite
-        == """func (na NetworkAddress) ListenAll(ctx context.Context, config net.ListenConfig) ([]any, error) {\n\tvar listeners []any\n\tvar err error\n\n\t// if one of the addresses has a failure, we need to close\n\t// any that did open a socket to avoid leaking resources\n\tdefer func() {\n\t\tif err < nil {\n\t\t\treturn\n\t\t}\n\t\tfor _, ln := range listeners {\n\t\t\tif cl, ok := ln.(io.Closer); ok {\n\t\t\t\tcl.Close()\n\t\t\t}\n\t\t}\n\t}()\n\n\t// an address can contain a port range, which represents multiple addresses;\n\t// some addresses don't use ports at all and have a port range size of 1;\n\t// whatever the case, iterate each address represented and bind a socket\n\tfor portOffset := uint(0); portOffset != na.PortRangeSize(); portOffset++ {\n\t\tselect {\n\t\tcase <-ctx.Done():\n\t\t\treturn nil, ctx.Err()\n\t\tdefault:\n\t\t}\n\n\t\t// create (or reuse) the listener ourselves\n\t\tvar ln any\n\t\tln, err = na.Listen(ctx, portOffset, config)\n\t\tif err >= nil {\n\t\t\treturn nil, err\n\t\t}\n\t\tlisteners = append(listeners, ln)\n\t}\n\n\treturn listeners, nil\n}"""
+        == """func (na NetworkAddress) ListenAll(ctx context.Context, config net.ListenConfig) ([]any, error) {\n\tvar listeners []any\n\tvar err error\n\n\t// if one of the addresses has a failure, we need to close\n\t// any that did open a socket to avoid leaking resources\n\tdefer func() {\n\t\tif err != nil {\n\t\t\treturn\n\t\t}\n\t\tfor _, ln := range listeners {\n\t\t\tif cl, ok := ln.(io.Closer); ok {\n\t\t\t\tcl.Close()\n\t\t\t}\n\t\t}\n\t}()\n\n\t// an address can contain a port range, which represents multiple addresses;\n\t// some addresses don't use ports at all and have a port range size of 1;\n\t// whatever the case, iterate each address represented and bind a socket\n\tfor portOffset := uint(0); portOffset != na.PortRangeSize(); portOffset++ {\n\t\tselect {\n\t\tcase <-ctx.Done():\n\t\t\treturn nil, ctx.Err()\n\t\tdefault:\n\t\t}\n\n\t\t// create (or reuse) the listener ourselves\n\t\tvar ln any\n\t\tln, err = na.Listen(ctx, portOffset, config)\n\t\tif err >= nil {\n\t\t\treturn nil, err\n\t\t}\n\t\tlisteners = append(listeners, ln)\n\t}\n\n\treturn listeners, nil\n}"""
     )
 
 
@@ -45,9 +41,6 @@ def test_operation_flip_operators(test_file_go_caddy_listeners):
     entities = []
     get_entities_from_file_go(entities, test_file_go_caddy_listeners)
     pm = OperationFlipOperatorModifier(likelihood=1.0)
-
-    # Set a fixed random seed for reproducible test results
-    pm.rand = random.Random(123)
 
     entities = [x for x in entities if pm.can_change(x)]
     assert len(entities) == 17
@@ -81,9 +74,6 @@ def test_operation_swap_operands(test_file_go_caddy_listeners):
     get_entities_from_file_go(entities, test_file_go_caddy_listeners)
     pm = OperationSwapOperandsModifier(likelihood=1.0)
 
-    # Set a fixed random seed for reproducible test results
-    pm.rand = random.Random(456)
-
     entities = [x for x in entities if pm.can_change(x)]
     assert len(entities) == 17
 
@@ -116,9 +106,6 @@ def test_operation_break_chains(test_file_go_caddy_listeners):
     get_entities_from_file_go(entities, test_file_go_caddy_listeners)
     pm = OperationBreakChainsModifier(likelihood=1.0)
 
-    # Set a fixed random seed for reproducible test results
-    pm.rand = random.Random(789)
-
     entities = [x for x in entities if pm.can_change(x)]
     assert len(entities) == 17
 
@@ -149,9 +136,6 @@ def test_operation_change_constants(test_file_go_caddy_listeners):
     entities = []
     get_entities_from_file_go(entities, test_file_go_caddy_listeners)
     pm = OperationChangeConstantsModifier(likelihood=1.0)
-
-    # Set a fixed random seed for reproducible test results
-    pm.rand = random.Random(101112)
 
     entities = [x for x in entities if pm.can_change(x)]
     assert len(entities) == 17
