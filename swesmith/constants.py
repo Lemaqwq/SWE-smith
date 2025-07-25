@@ -48,6 +48,7 @@ class CodeProperty(Enum):
     # Core entity types
     IS_FUNCTION = "is_function"
     IS_CLASS = "is_class"
+    IS_STRUCT = "is_struct"
 
     # Control flow
     HAS_EXCEPTION = "has_exception"

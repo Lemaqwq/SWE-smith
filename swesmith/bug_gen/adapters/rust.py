@@ -2,13 +2,219 @@ import re
 import tree_sitter_rust as tsrs
 import warnings
 
-from swesmith.constants import TODO_REWRITE, CodeEntity
+from swesmith.constants import TODO_REWRITE, CodeEntity, CodeProperty
 from tree_sitter import Language, Parser, Query, QueryCursor
 
 RUST_LANGUAGE = Language(tsrs.language())
 
 
 class RustEntity(CodeEntity):
+    def _analyze_properties(self):
+        """Analyze Rust code properties."""
+        node = self.node
+
+        # Core entity types
+        if node.type == "function_item":
+            self._tags.add(CodeProperty.IS_FUNCTION)
+        elif node.type in ["struct_item", "enum_item"]:
+            self._tags.add(CodeProperty.IS_STRUCT)
+        # Note: trait_item and impl_item are handled separately since they're more like interfaces/implementations
+
+        # Control flow and operations analysis
+        self._walk_for_properties(node)
+
+    def _walk_for_properties(self, n):
+        """Walk the AST and analyze properties."""
+        self._check_control_flow(n)
+        self._check_operations(n)
+        self._check_expressions(n)
+
+        # Check for attributes on the function itself
+        self._check_function_attributes()
+
+        for child in n.children:
+            self._walk_for_properties(child)
+
+    def _check_control_flow(self, n):
+        """Check for control flow patterns."""
+        # Loop constructs
+        if n.type in ["for_expression", "while_expression", "loop_expression"]:
+            self._tags.add(CodeProperty.HAS_LOOP)
+
+        # Conditional constructs
+        if n.type == "if_expression":
+            self._tags.add(CodeProperty.HAS_IF)
+            # Check if this if expression has an else clause
+            for child in n.children:
+                if child.type == "else_clause":
+                    self._tags.add(CodeProperty.HAS_IF_ELSE)
+                    break
+
+        # Match expressions (similar to switch)
+        if n.type == "match_expression":
+            self._tags.add(CodeProperty.HAS_SWITCH)
+
+        # Exception handling (Result/Option patterns and try blocks)
+        if n.type in ["try_expression", "question_mark_expression"]:
+            self._tags.add(CodeProperty.HAS_EXCEPTION)
+
+    def _check_operations(self, n):
+        """Check for various operations."""
+        # Array/vector indexing
+        if n.type == "index_expression":
+            self._tags.add(CodeProperty.HAS_LIST_INDEXING)
+
+        # Function calls
+        if n.type == "call_expression":
+            self._tags.add(CodeProperty.HAS_FUNCTION_CALL)
+
+        # Return statements
+        if n.type == "return_expression":
+            self._tags.add(CodeProperty.HAS_RETURN)
+
+        # Import statements (use declarations)
+        if n.type in ["use_declaration", "extern_crate_declaration"]:
+            self._tags.add(CodeProperty.HAS_IMPORT)
+
+        # Assignment operations
+        if n.type in [
+            "assignment_expression",
+            "let_declaration",
+            "const_item",
+            "static_item",
+        ]:
+            self._tags.add(CodeProperty.HAS_ASSIGNMENT)
+
+        # Closures (Rust's lambda equivalent)
+        if n.type == "closure_expression":
+            self._tags.add(CodeProperty.HAS_LAMBDA)
+
+        # Decorators (attributes in Rust)
+        if n.type == "attribute_item":
+            self._tags.add(CodeProperty.HAS_DECORATOR)
+
+        # Wrapper constructs (unsafe blocks, etc.)
+        if n.type in ["unsafe_block"]:
+            self._tags.add(CodeProperty.HAS_WRAPPER)
+
+        # Iterator patterns (similar to list comprehension)
+        if n.type == "field_expression":
+            # Check if this is a method call on an iterator
+            for child in n.children:
+                if child.type == "field_identifier" and hasattr(child, "text"):
+                    field_text = (
+                        child.text.decode("utf-8")
+                        if isinstance(child.text, bytes)
+                        else str(child.text)
+                    )
+                    if field_text in [
+                        "map",
+                        "filter",
+                        "collect",
+                        "fold",
+                        "reduce",
+                        "iter",
+                        "into_iter",
+                    ]:
+                        self._tags.add(CodeProperty.HAS_LIST_COMPREHENSION)
+                        break
+
+        # Check for inheritance/trait implementations
+        if n.type == "impl_item":
+            # Check if this is implementing a trait (has_parent equivalent)
+            for child in n.children:
+                if child.type == "for" or (
+                    hasattr(child, "text") and b"for" in child.text
+                ):
+                    self._tags.add(CodeProperty.HAS_PARENT)
+                    break
+
+    def _check_expressions(self, n):
+        """Check expression patterns."""
+        # Binary operations
+        if n.type == "binary_expression":
+            self._tags.add(CodeProperty.HAS_BINARY_OP)
+            self._tags.add(CodeProperty.HAS_ARITHMETIC)
+
+            # Check for boolean and comparison operators in children
+            for child in n.children:
+                if hasattr(child, "text"):
+                    text = (
+                        child.text.decode("utf-8")
+                        if isinstance(child.text, bytes)
+                        else str(child.text)
+                    )
+                    if text in ["&&", "||"]:
+                        self._tags.add(CodeProperty.HAS_BOOL_OP)
+                    # Check for comparison operators (off by one potential)
+                    elif text in ["<", ">", "<=", ">="]:
+                        self._tags.add(CodeProperty.HAS_OFF_BY_ONE)
+
+        # Unary operations
+        if n.type == "unary_expression":
+            self._tags.add(CodeProperty.HAS_UNARY_OP)
+
+    def _check_function_attributes(self):
+        """Check for attributes (decorators) on the function."""
+        # Look for attributes before the function
+        possible_att = self.node.prev_named_sibling
+        while possible_att and possible_att.type == "attribute_item":
+            self._tags.add(CodeProperty.HAS_DECORATOR)
+            possible_att = possible_att.prev_named_sibling
+
+    def _check_file_level_imports(self, root_node):
+        """Check for import statements at the file level."""
+
+        def walk_for_imports(node):
+            if node.type in ["use_declaration", "extern_crate_declaration"]:
+                self._tags.add(CodeProperty.HAS_IMPORT)
+                return
+            for child in node.children:
+                walk_for_imports(child)
+
+        walk_for_imports(root_node)
+
+    @property
+    def complexity(self) -> int:
+        """
+        Calculate the complexity of a Rust function.
+        Complexity starts at 1 and increases for each decision point.
+        """
+
+        def walk(node):
+            score = 0
+            # Decision points in Rust
+            if node.type in [
+                "if_expression",
+                "match_expression",
+                "for_expression",
+                "while_expression",
+                "loop_expression",
+                "match_arm",  # Each match arm adds complexity
+                "question_mark_expression",  # ? operator
+                "try_expression",
+            ]:
+                score += 1
+
+            # Boolean operators add complexity
+            elif node.type == "binary_expression":
+                for child in node.children:
+                    if hasattr(child, "text"):
+                        text = (
+                            child.text.decode("utf-8")
+                            if isinstance(child.text, bytes)
+                            else str(child.text)
+                        )
+                        if text in ["&&", "||"]:
+                            score += 1
+
+            for child in node.children:
+                score += walk(child)
+
+            return score
+
+        return 1 + walk(self.node)
+
     @property
     def name(self) -> str:
         func_query = Query(RUST_LANGUAGE, "(function_item name: (identifier) @name)")
@@ -117,7 +323,7 @@ def _build_entity(node, lines, file_path: str) -> RustEntity:
         else:
             dedented.append(line.lstrip("\t "))
 
-    return RustEntity(
+    entity = RustEntity(
         file_path=file_path,
         indent_level=indent_level,
         indent_size=indent_size,
@@ -126,3 +332,11 @@ def _build_entity(node, lines, file_path: str) -> RustEntity:
         node=node,
         src_code="\n".join(dedented),
     )
+
+    # Check for imports at the file level
+    root = node
+    while root.parent:
+        root = root.parent
+    entity._check_file_level_imports(root)
+
+    return entity
