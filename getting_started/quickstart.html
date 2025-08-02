@@ -8,28 +8,28 @@
       
       
       
-        <link rel="canonical" href="https://swe-smith.com/guides/create_instances/">
+        <link rel="canonical" href="https://swe-smith.com/getting_started/quickstart.html">
       
       
-        <link rel="prev" href="../env_construction/">
+        <link rel="prev" href="assets.html">
       
       
-        <link rel="next" href="../harnesses/">
+        <link rel="next" href="../guides/index.html">
       
       
-      <link rel="icon" href="../../assets/swesmith_logo.png">
+      <link rel="icon" href="../assets/swesmith_logo.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.16">
     
     
       
-        <title>Create Instances - SWE-smith Documentation</title>
+        <title>Quickstart - SWE-smith Documentation</title>
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.7e37652d.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.7e37652d.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
       
       
 
@@ -54,15 +54,15 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
     
-      <link rel="stylesheet" href="../../css/custom.css">
+      <link rel="stylesheet" href="../css/custom.css">
     
-      <link rel="stylesheet" href="../../css/mkdocstrings.css">
+      <link rel="stylesheet" href="../css/mkdocstrings.css">
     
-      <link rel="stylesheet" href="../../css/bubbles.css">
+      <link rel="stylesheet" href="../css/bubbles.css">
     
-    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
   
@@ -79,7 +79,7 @@
     
     
     
-   <link href="../../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>
+   <link href="../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>
     html.glightbox-open { overflow: initial; height: 100%; }
     .gslide-title { margin-top: 0px; user-select: text; }
     .gslide-desc { color: #666; user-select: text; }
@@ -88,7 +88,7 @@
     .gdesc-inner { font-size: 0.75rem; }
     body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color);}
     body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color);}
-    body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color);}</style> <script src="../../assets/javascripts/glightbox.min.js"></script></head>
+    body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color);}</style> <script src="../assets/javascripts/glightbox.min.js"></script></head>
   
   
     
@@ -107,12 +107,29 @@
     <div data-md-component="skip">
       
         
-        <a href="#lm-generated" class="md-skip">
+        <a href="#creating-task-instances" class="md-skip">
           Skip to content
         </a>
       
     </div>
     <div data-md-component="announce">
+      
+        <aside class="md-banner">
+          <div class="md-banner__inner md-grid md-typeset">
+            
+              <button class="md-banner__button md-icon" aria-label="Don't show this again">
+                
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+              </button>
+            
+            
+📣 Check out <a href="https://mini-swe-agent.com">Mini-SWE-Agent</a>, an AI agent implemented in 100 lines that achieves 65% on SWE-bench verified!
+
+          </div>
+          
+            <script>var el=document.querySelector("[data-md-component=announce]");if(el){var content=el.querySelector(".md-typeset");__md_hash(content.innerHTML)===__md_get("__announce")&&(el.hidden=!0)}</script>
+          
+        </aside>
       
     </div>
     
@@ -127,9 +144,9 @@
 
 <header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../.." title="SWE-smith Documentation" class="md-header__button md-logo" aria-label="SWE-smith Documentation" data-md-component="logo">
+    <a href="../index.html" title="SWE-smith Documentation" class="md-header__button md-logo" aria-label="SWE-smith Documentation" data-md-component="logo">
       
-  <img src="../../assets/swesmith_logo.png" alt="logo">
+  <img src="../assets/swesmith_logo.png" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -146,7 +163,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Create Instances
+              Quickstart
             
           </span>
         </div>
@@ -261,7 +278,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../.." class="md-tabs__link">
+      <a href="../index.html" class="md-tabs__link">
         
   
   
@@ -278,11 +295,13 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="../../getting_started/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="index.html" class="md-tabs__link">
           
   
   
@@ -300,13 +319,11 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="../" class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../guides/index.html" class="md-tabs__link">
           
   
   
@@ -348,9 +365,9 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="SWE-smith Documentation" class="md-nav__button md-logo" aria-label="SWE-smith Documentation" data-md-component="logo">
+    <a href="../index.html" title="SWE-smith Documentation" class="md-nav__button md-logo" aria-label="SWE-smith Documentation" data-md-component="logo">
       
-  <img src="../../assets/swesmith_logo.png" alt="logo">
+  <img src="../assets/swesmith_logo.png" alt="logo">
 
     </a>
     SWE-smith Documentation
@@ -377,7 +394,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../.." class="md-nav__link">
+      <a href="../index.html" class="md-nav__link">
         
   
   
@@ -396,144 +413,6 @@
       
   
   
-  
-  
-    
-    
-      
-        
-          
-        
-      
-        
-      
-        
-      
-        
-      
-    
-    
-    
-      
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
-        
-          
-          <div class="md-nav__link md-nav__container">
-            <a href="../../getting_started/" class="md-nav__link ">
-              
-  
-  
-  <span class="md-ellipsis">
-    Getting started
-    
-  </span>
-  
-
-            </a>
-            
-              
-              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
-                <span class="md-nav__icon md-icon"></span>
-              </label>
-            
-          </div>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_2">
-            <span class="md-nav__icon md-icon"></span>
-            Getting started
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../getting_started/installation/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Installation
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../getting_started/assets/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Assets
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../getting_started/quickstart/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Quickstart
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
     
   
   
@@ -543,12 +422,6 @@
       
         
           
-        
-      
-        
-      
-        
-      
         
       
         
@@ -571,16 +444,16 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../" class="md-nav__link ">
+            <a href="index.html" class="md-nav__link ">
               
   
   
   <span class="md-ellipsis">
-    Tutorials
+    Getting started
     
   </span>
   
@@ -588,16 +461,16 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="">
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_3">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
-            Tutorials
+            Getting started
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -610,12 +483,35 @@
   
   
     <li class="md-nav__item">
-      <a href="../env_construction/" class="md-nav__link">
+      <a href="installation.html" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Build Environments
+    Installation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="assets.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Assets
     
   </span>
   
@@ -645,7 +541,7 @@
   
   
   <span class="md-ellipsis">
-    Create Instances
+    Quickstart
     
   </span>
   
@@ -653,12 +549,12 @@
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <a href="./" class="md-nav__link md-nav__link--active">
+      <a href="quickstart.html" class="md-nav__link md-nav__link--active">
         
   
   
   <span class="md-ellipsis">
-    Create Instances
+    Quickstart
     
   </span>
   
@@ -679,36 +575,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#lm-generated" class="md-nav__link">
+  <a href="#creating-task-instances" class="md-nav__link">
     <span class="md-ellipsis">
-      LM Generated
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#procedural-modification" class="md-nav__link">
-    <span class="md-ellipsis">
-      Procedural Modification
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#pr-mirroring" class="md-nav__link">
-    <span class="md-ellipsis">
-      PR Mirroring
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#combining-bugs" class="md-nav__link">
-    <span class="md-ellipsis">
-      Combining Bugs
+      Creating Task Instances
     </span>
   </a>
   
@@ -723,6 +592,81 @@
 
               
             
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../guides/index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    Tutorials
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Tutorials
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
               
                 
   
@@ -730,7 +674,53 @@
   
   
     <li class="md-nav__item">
-      <a href="../harnesses/" class="md-nav__link">
+      <a href="../guides/env_construction.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Build Environments
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/create_instances.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Create Instances
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/harnesses.html" class="md-nav__link">
         
   
   
@@ -753,7 +743,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../issue_gen/" class="md-nav__link">
+      <a href="../guides/issue_gen.html" class="md-nav__link">
         
   
   
@@ -776,7 +766,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../difficulty_rating/" class="md-nav__link">
+      <a href="../guides/difficulty_rating.html" class="md-nav__link">
         
   
   
@@ -799,7 +789,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../train_swe_agent/" class="md-nav__link">
+      <a href="../guides/train_swe_agent.html" class="md-nav__link">
         
   
   
@@ -847,36 +837,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#lm-generated" class="md-nav__link">
+  <a href="#creating-task-instances" class="md-nav__link">
     <span class="md-ellipsis">
-      LM Generated
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#procedural-modification" class="md-nav__link">
-    <span class="md-ellipsis">
-      Procedural Modification
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#pr-mirroring" class="md-nav__link">
-    <span class="md-ellipsis">
-      PR Mirroring
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#combining-bugs" class="md-nav__link">
-    <span class="md-ellipsis">
-      Combining Bugs
+      Creating Task Instances
     </span>
   </a>
   
@@ -899,7 +862,7 @@
 
 
   
-    <a href="https://github.com/SWE-bench/SWE-smith/edit/main/docs/guides/create_instances.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+    <a href="https://github.com/SWE-bench/SWE-smith/edit/main/docs/getting_started/quickstart.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -907,172 +870,40 @@
   
 
 
-  <h1>Create Instances</h1>
+  <h1>Quickstart</h1>
 
-<p>You should now have an environment (Docker image) of a repository. Let's synthesize some task instances.</p>
-<p>Task instances are modified versions of the codebase which break existing tests.
-The formulation for these task instances is identical to the definition put forth by <a href="https://swe-bench.github.io">SWE-bench</a>.</p>
-<div class="admonition note">
-<p class="admonition-title">Bugs and task instances</p>
-<p>The terms "bug" and "task instance" are used interchangeably in this documentation. They refer to the same thing.</p>
-</div>
-<p>We design each method with the following principles in mind:</p>
-<ul>
-<li><strong>Generalizability</strong>: These methods work for any Python repository.</li>
-<li><strong>Scalability</strong>: These methods require little to no manual intervention.</li>
-<li><strong>Diversity</strong>: These methods generate a diverse set of bugs.</li>
-</ul>
-<div style="text-align:center;margin-top:1.5rem">
-  <a class="glightbox" href="../../assets/bug_gen_overview.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../assets/bug_gen_overview.png" alt="Bug Generation Overview" style="width:80%"/></a>
-</div>
+<p>We recommend checking out the <a href="../guides/index.html">tutorials</a> for comprehensive guidance on SWE-smith usage.</p>
+<p>However, if you learn more easily by playing with the code, here's sequences of scripts corresponding to different SWE-smith workflows.
+If you run into issues, please consult the <a href="../guides/index.html">tutorials</a> first, then open an <a href="https://github.com/SWE-bench/SWE-smith/issues/new/choose">issue</a> if you can't find a solution.</p>
+<h3 id="creating-task-instances">Creating Task Instances</h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># Run LM rewrite strategy to produce bugs</span>
+python<span class="w"> </span>-m<span class="w"> </span>swesmith.bug_gen.llm.modify<span class="w"> </span>pandas-dev__pandas.95280573<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--config_file<span class="w"> </span>configs/bug_gen/lm_modify.yml<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--model<span class="w"> </span>claude-3-7-sonnet-20250219<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--n_bugs<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--n_workers<span class="o">=</span><span class="m">20</span>
 
-<p>As input, each method takes in the name of a GitHub repository, along with method-specific flags.</p>
-<p>As output, each method produces artifacts under <code>logs/bug_gen/&lt;repo&gt;</code>.
-A candidate task instance is usually represented as two files:</p>
-<ol>
-<li>A <code>bug__&lt;bug_type&gt;__&lt;hash&gt;.diff</code> file that, when applied to the repository, introduces a bug.</li>
-<li>A <code>metadata__&lt;bug_type&gt;__&lt;hash&gt;.json</code> file containing metadata about how the task instance was created.</li>
-</ol>
-<p>The <code>bug_*.diff</code> files are the candidate task instances.
-The <code>&lt;hash&gt;</code> is computed over the contents of the <code>bug__&lt;bug_type&gt;__&lt;hash&gt;.diff</code> file.
-The <code>metadata_*.json</code> files are created for statistical and analytical purposes.</p>
-<h2 id="lm-generated">LM Generated</h2>
-<p><strong>How does it work?</strong></p>
-<div style="text-align:center">
-  <a class="glightbox" href="../../assets/lm_generate.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../assets/lm_generate.png" alt="SWE-smith" style="width:100%"/></a>
-</div>
+<span class="c1"># Collect all task instances into a single file for validation</span>
+python<span class="w"> </span>-m<span class="w"> </span>swesmith.bug_gen.collect_patches<span class="w"> </span>logs/bug_gen/pandas-dev__pandas.95280573/
 
-<p>We first identify all unique programmatic entities (e.g., classes, functions) in a repository.
-Per entity, we prompt a language model to either:</p>
-<ul>
-<li><em>Modify</em> the entity such that a bug is introduced (a.k.a. <em>LM Modify</em>) or</li>
-<li><em>Rewrite</em> the entity from scratch (a.k.a. <em>LM Rewrite</em>).</li>
-</ul>
-<p><strong>How do I run it?</strong>
-To prompt an LM to modify a function to introduce a bug:
-<div class="highlight"><pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>swesmith.bug_gen.llm.modify<span class="w"> </span><span class="nv">$repo</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--n_bugs<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--model<span class="w"> </span>openai/gpt-4o<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--config_file<span class="w"> </span>configs/bug_gen/lm_modify.yml
-</code></pre></div></p>
-<p>To prompt an LM to rewrite a function from scratch:
-<div class="highlight"><pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>swesmith.bug_gen.llm.rewrite<span class="w"> </span><span class="nv">$repo</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--model<span class="w"> </span>anthropic/claude-3-7-sonnet-20250219<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--type<span class="w"> </span>func<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--config_file<span class="w"> </span>configs/bug_gen/lm_rewrite.yml<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--n_workers<span class="w"> </span><span class="m">1</span>
-</code></pre></div></p>
-<p><strong>What artifact(s) does it produce?</strong>
-Under <code>logs/bug_gen/&lt;repo&gt;</code>, you will find a 2 dimensional folder structure.</p>
-<ul>
-<li>The first dimension corresponds to a file path in that repository (e.g., <code>&lt;repo&gt;__src__utils__rule_utils.py</code>, which
-would correspond to <code>src/utils/rule_utils.py</code>).</li>
-<li>The second dimension corresponds to individual functions or classes in that file.</li>
-</ul>
-<p>Under each of these folders, you will see:</p>
-<ul>
-<li>For LM Modify, <code>bug__lm_modify__&lt;hash&gt;.diff</code> + <code>metadata__lm_modify__&lt;hash&gt;.json</code> files</li>
-<li>For LM Rewrite, <code>bug__lm_rewrite__&lt;hash&gt;.diff</code> + <code>metadata__lm_rewrite__&lt;hash&gt;.json</code> files</li>
-</ul>
-<h2 id="procedural-modification">Procedural Modification</h2>
-<p><strong>How does it work?</strong></p>
-<div style="text-align:center">
-  <a class="glightbox" href="../../assets/procedural.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../assets/procedural.png" alt="SWE-smith" style="width:100%"/></a>
-</div>
+<span class="c1"># Run validation on the collected task instances</span>
+python<span class="w"> </span>-m<span class="w"> </span>swesmith.harness.valid<span class="w"> </span>logs/bug_gen/pandas-dev__pandas.95280573_all_patches.json<span class="w"> </span>--workers<span class="w"> </span><span class="m">8</span>
 
-<p>Similar to LM Generated bugs, we first identify all unique programmatic entities in a repository.
-Next, we convert every entity into an <code>ast</code> (Abstract Syntax Tree) object.</p>
-<p>We then modify the AST.
-For each programmatic entity, we check whether it satisfies a set of criteria that checks whether the entity can be modified in a certain way.
-If the criteria is met, we modify the AST, then convert it back into source code.</p>
-<p>A concrete example: We create a Procedural Modification technique that removes <code>if</code> conditional blocks from a function.
-We check whether a function has an <code>if</code> block in it.
-If it does, we remove the <code>if</code> subtree from the AST, then convert the modified AST back into code.</p>
-<p>Why AST's instead of the literal code?
-Because AST's give us a rigorous representation that allow modifications of specific program structures to be enforced easily and effortlessly.</p>
-<p><strong>How do I run it?</strong>
-<div class="highlight"><pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>swesmith.bug_gen.procedural.generate<span class="w"> </span><span class="nv">$repo</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--type<span class="w"> </span><span class="o">[</span>func<span class="p">|</span>class<span class="p">|</span>object<span class="o">]</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--max_bugs<span class="w"> </span><span class="m">10</span>
-</code></pre></div></p>
-<p><strong>What artifact(s) does it produce?</strong>
-Identical to LM Generated task instances, but the artifacts are instead named:</p>
-<ul>
-<li><code>bug__func_pm_&lt;name&gt;__&lt;hash&gt;.diff</code>, for instance <code>bug__func_pm_ctrl_shuffle__jdinra8l.diff</code>.</li>
-<li><code>metadata__func_pm_&lt;name&gt;__&lt;hash&gt;.json</code></li>
-</ul>
-<p>Where <code>&lt;name&gt;</code> refers to the specific identifier for the procedural modification technique.
-There are 13 (and counting) in total.</p>
-<h2 id="pr-mirroring">PR Mirroring</h2>
-<p><strong>How does it work?</strong></p>
-<div style="text-align:center">
-  <a class="glightbox" href="../../assets/pr_mirror.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../assets/pr_mirror.png" alt="SWE-smith" style="width:100%"/></a>
-</div>
+<span class="c1"># Gather valid task instances</span>
+python<span class="w"> </span>-m<span class="w"> </span>swesmith.harness.gather<span class="w"> </span>logs/run_validation/pandas_test
 
-<p>This method leverages SWE-bench's <a href="https://github.com/SWE-bench/SWE-bench/blob/main/swebench/collect/run_get_tasks_pipeline.sh">task collection script</a>.</p>
-<p>Run the script for a repository, and it will create a <code>&lt;repo&gt;-task-instances.jsonl.all</code>.
-This file contains candidate task instances based on real pull requests (PRs) from the repository.
-A pull request is considered a candidate if</p>
-<ul>
-<li>It has at least 1+ issue associated with it.</li>
-<li>It edits at least 1+ code file.</li>
-</ul>
-<div class="admonition note">
-<p class="admonition-title">Candidate criteria</p>
-<p>SWE-bench has slightly more stringent criteria for PRs that qualify as candidates.
-Specifically, PRs must also change 1+ test file(s).
-Because SWE-smith does rely on test file changes to identify breaking existing tests, we can attempt to recreate a broader
-subset of PRs than what SWE-bench normally considers.</p>
-</div>
-<p>We provide this file to SWE-smith.
-Per PR, we ask an LM to revert the PR's changes file by file.
-If this process succeeds, we create a candidate task instance that effectively undoes the PR.</p>
-<p><strong>How do I run it?</strong>
-<div class="highlight"><pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>swesmith.bug_gen.mirror.generate<span class="w"> </span><span class="nv">$file</span><span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--model<span class="w"> </span>openai/o3-mini
-</code></pre></div></p>
-<p><strong>What artifact(s) does it produce?</strong></p>
-<h2 id="combining-bugs">Combining Bugs</h2>
-<p><strong>How does it work?</strong></p>
-<div style="text-align:center">
-  <a class="glightbox" href="../../assets/combine.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../assets/combine.png" alt="SWE-smith" style="width:100%"/></a>
-</div>
-
-<p>You might have noticed that Procedural Modification and LM Generated bugs both target individual entities.
-This means at most one file is modified per bug.</p>
-<p>We can create more complex bugs by simply combining multiple bugs together.</p>
-<p>We generally do this by identifying patches that modify the same file or module.
-A module refers to subdirectories in the codebase.</p>
-<p>For the identified patches, we apply them one by one.
-If they all apply cleanly, we combine them into a single patch.</p>
-<p>You can control</p>
-<ul>
-<li><code>num_patches</code>: The number of patches to combine together.</li>
-<li><code>limit_per_file/module</code>: Maximum number of combined bugs to generate for any file/module.</li>
-<li><code>max_combos</code>: Maximum number of candidate combinations to generate.</li>
-<li>(For Module) <code>depth</code>: A depth of <code>2</code> means any patches under <code>a/b</code> are considered to be in the same module. A depth of <code>3</code> means any patches under <code>a/b/c</code> are considered to be in the same module.</li>
-</ul>
-<div class="admonition warning">
-<p class="admonition-title">Validated task instances only</p>
-<p>This method combines <em>validated</em> task instances. For this method to work, you must have
-1. Generated 1+ Procedural Modification or LM Modify/Rewrite bugs, and 2. validated them.
-See the <a href="../harnesses/#validation">Validation</a> section for more details.</p>
-</div>
-<p><strong>How do I run it?</strong>
-<div class="highlight"><pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>swesmith.bug_gen.combine.same_file<span class="w"> </span>logs/bug_gen/&lt;repo&gt;<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--num_patches<span class="w"> </span><span class="m">3</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--limit_per_file<span class="w"> </span><span class="m">15</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--max_combos<span class="w"> </span><span class="m">100</span>
-</code></pre></div></p>
-<div class="highlight"><pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>swesmith.bug_gen.combine.same_module<span class="w"> </span>logs/bug_gen/&lt;repo&gt;<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--num_patches<span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--limit_per_module<span class="w"> </span><span class="m">20</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--max_combos<span class="w"> </span><span class="m">200</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--depth<span class="w"> </span><span class="m">2</span>
+<span class="c1"># Generate issues for the valid task instances</span>
+python<span class="w"> </span>-m<span class="w"> </span>swesmith.issue_gen.generate<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--dataset_path<span class="w"> </span>logs/run_validation/basic/pandas_test.json<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--model<span class="w"> </span>claude-3-7-sonnet-20250219<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--n_workers<span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--config_file<span class="w"> </span>configs/issue_gen/ig_v2.yaml<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--experiment_id<span class="w"> </span>ig_v2
 </code></pre></div>
-<p><strong>What artifact(s) does it produce?</strong></p>
-<p>For <code>combine.same_file</code>, a <code>bug__combine_file__&lt;hash&gt;.diff</code> file is written to <code>logs/bug_gen/&lt;repo&gt;/&lt;file_path&gt;/</code>.</p>
-<p>For <code>combine.same_module</code>, a <code>bug__combine_module__&lt;hash&gt;.diff</code> file is written to <code>logs/bug_gen/&lt;repo&gt;/combine_module/</code>.</p>
+<div class="admonition tip">
+<p class="admonition-title">Next steps</p>
+<p>We provide <a href="../guides/index.html">detailed tutorials</a> on each of these steps.</p>
+</div>
 
 
 
@@ -1093,23 +924,27 @@ See the <a href="../harnesses/#validation">Validation</a> section for more detai
 <div class="floating-bubbles">
   <div class="floating-bubbles-title">Our projects</div>
   <a href="https://swebench.com" class="bubble" title="SWE-bench">
-    <img src="../../assets/swebench_logo.png" alt="SWE-bench">
+    <img src="../assets/swebench_logo.png" alt="SWE-bench">
     <span class="bubble-tooltip">SWE-bench</span>
   </a>
   <a href="https://swe-agent.com/" class="bubble" title="SWE-agent">
-    <img src="../../assets/sweagent_logo.svg" alt="SWE-agent">
+    <img src="../assets/sweagent_logo.svg" alt="SWE-agent">
     <span class="bubble-tooltip">SWE-agent</span>
   </a>
+  <a href="https://mini-swe-agent.com/" class="bubble" title="Mini-SWE-Agent">
+    <img src="../assets/mini_logo.svg" alt="Mini-SWE-Agent">
+    <span class="bubble-tooltip">Mini-SWE-Agent</span>
+  </a>
   <a href="https://swe-rex.com/" class="bubble" title="SWE-rex">
-    <img src="../../assets/swerex_logo.svg" alt="SWE-rex">
+    <img src="../assets/swerex_logo.svg" alt="SWE-rex">
     <span class="bubble-tooltip">SWE-ReX</span>
   </a>
   <!-- <a href="https://swesmith.com" class="bubble" title="SWE-smith">
-    <img src="../../assets/swesmith_logo.png" alt="SWE-smith">
+    <img src="../assets/swesmith_logo.png" alt="SWE-smith">
     <span class="bubble-tooltip">SWE-smith</span>
   </a> -->
   <a href="https://www.swebench.com/sb-cli/" class="bubble" title="sb-cli">
-    <img src="../../assets/sbcli_logo.svg" alt="sb-cli">
+    <img src="../assets/sbcli_logo.svg" alt="sb-cli">
     <span class="bubble-tooltip">sb-cli</span>
   </a>
 </div>
@@ -1139,7 +974,7 @@ See the <a href="../harnesses/#validation">Validation</a> section for more detai
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../env_construction/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Build Environments">
+          <a href="assets.html" class="md-footer__link md-footer__link--prev" aria-label="Previous: Assets">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -1149,20 +984,20 @@ See the <a href="../harnesses/#validation">Validation</a> section for more detai
                 Previous
               </span>
               <div class="md-ellipsis">
-                Build Environments
+                Assets
               </div>
             </div>
           </a>
         
         
           
-          <a href="../harnesses/" class="md-footer__link md-footer__link--next" aria-label="Next: Validation &amp; Evaluation">
+          <a href="../guides/index.html" class="md-footer__link md-footer__link--next" aria-label="Next: Tutorials">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Validation & Evaluation
+                Tutorials
               </div>
             </div>
             <div class="md-footer__button md-icon">
@@ -1198,10 +1033,10 @@ See the <a href="../harnesses/#validation">Validation</a> section for more detai
     
     
       
-      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.indexes", "content.action.edit", "navigation.footer", "content.code.copy", "content.footnote.tooltips", "header.autohide", "announce.dismiss", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+      <script id="__config" type="application/json">{"base": "..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.indexes", "content.action.edit", "navigation.footer", "content.code.copy", "content.footnote.tooltips", "header.autohide", "announce.dismiss", "content.code.annotate"], "search": "../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.50899def.min.js"></script>
+      <script src="../assets/javascripts/bundle.50899def.min.js"></script>
       
     
   <script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
