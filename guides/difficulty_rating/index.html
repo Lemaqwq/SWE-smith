@@ -8,28 +8,28 @@
       
       
       
-        <link rel="canonical" href="https://swe-smith.com/guides/env_construction.html">
+        <link rel="canonical" href="https://swe-smith.com/guides/difficulty_rating/">
       
       
-        <link rel="prev" href="index.html">
+        <link rel="prev" href="../issue_gen/">
       
       
-        <link rel="next" href="create_instances.html">
+        <link rel="next" href="../train_swe_agent/">
       
       
-      <link rel="icon" href="../assets/swesmith_logo.png">
+      <link rel="icon" href="../../assets/swesmith_logo.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.16">
     
     
       
-        <title>Build Environments - SWE-smith Documentation</title>
+        <title>Rate Difficulty - SWE-smith Documentation</title>
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.7e37652d.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.7e37652d.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
       
       
 
@@ -54,15 +54,15 @@
       
     
     
-      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
     
-      <link rel="stylesheet" href="../css/custom.css">
+      <link rel="stylesheet" href="../../css/custom.css">
     
-      <link rel="stylesheet" href="../css/mkdocstrings.css">
+      <link rel="stylesheet" href="../../css/mkdocstrings.css">
     
-      <link rel="stylesheet" href="../css/bubbles.css">
+      <link rel="stylesheet" href="../../css/bubbles.css">
     
-    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
   
@@ -79,7 +79,7 @@
     
     
     
-   <link href="../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>
+   <link href="../../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>
     html.glightbox-open { overflow: initial; height: 100%; }
     .gslide-title { margin-top: 0px; user-select: text; }
     .gslide-desc { color: #666; user-select: text; }
@@ -88,7 +88,7 @@
     .gdesc-inner { font-size: 0.75rem; }
     body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color);}
     body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color);}
-    body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color);}</style> <script src="../assets/javascripts/glightbox.min.js"></script></head>
+    body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color);}</style> <script src="../../assets/javascripts/glightbox.min.js"></script></head>
   
   
     
@@ -107,7 +107,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#automatically-install-repos-with-swe-agent" class="md-skip">
+        <a href="#inference" class="md-skip">
           Skip to content
         </a>
       
@@ -144,9 +144,9 @@
 
 <header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../index.html" title="SWE-smith Documentation" class="md-header__button md-logo" aria-label="SWE-smith Documentation" data-md-component="logo">
+    <a href="../.." title="SWE-smith Documentation" class="md-header__button md-logo" aria-label="SWE-smith Documentation" data-md-component="logo">
       
-  <img src="../assets/swesmith_logo.png" alt="logo">
+  <img src="../../assets/swesmith_logo.png" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -163,7 +163,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Build Environments
+              Rate Difficulty
             
           </span>
         </div>
@@ -278,7 +278,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../index.html" class="md-tabs__link">
+      <a href="../.." class="md-tabs__link">
         
   
   
@@ -299,7 +299,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../getting_started/index.html" class="md-tabs__link">
+        <a href="../../getting_started/" class="md-tabs__link">
           
   
   
@@ -323,7 +323,7 @@
     
     
       <li class="md-tabs__item md-tabs__item--active">
-        <a href="index.html" class="md-tabs__link">
+        <a href="../" class="md-tabs__link">
           
   
   
@@ -365,9 +365,9 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../index.html" title="SWE-smith Documentation" class="md-nav__button md-logo" aria-label="SWE-smith Documentation" data-md-component="logo">
+    <a href="../.." title="SWE-smith Documentation" class="md-nav__button md-logo" aria-label="SWE-smith Documentation" data-md-component="logo">
       
-  <img src="../assets/swesmith_logo.png" alt="logo">
+  <img src="../../assets/swesmith_logo.png" alt="logo">
 
     </a>
     SWE-smith Documentation
@@ -394,7 +394,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../index.html" class="md-nav__link">
+      <a href="../.." class="md-nav__link">
         
   
   
@@ -443,7 +443,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../getting_started/index.html" class="md-nav__link ">
+            <a href="../../getting_started/" class="md-nav__link ">
               
   
   
@@ -478,7 +478,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../getting_started/installation.html" class="md-nav__link">
+      <a href="../../getting_started/installation/" class="md-nav__link">
         
   
   
@@ -501,7 +501,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../getting_started/assets.html" class="md-nav__link">
+      <a href="../../getting_started/assets/" class="md-nav__link">
         
   
   
@@ -524,7 +524,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../getting_started/quickstart.html" class="md-nav__link">
+      <a href="../../getting_started/quickstart/" class="md-nav__link">
         
   
   
@@ -592,7 +592,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="index.html" class="md-nav__link ">
+            <a href="../" class="md-nav__link ">
               
   
   
@@ -624,30 +624,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    Build Environments
-    
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="env_construction.html" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../env_construction/" class="md-nav__link">
         
   
   
@@ -658,42 +638,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#automatically-install-repos-with-swe-agent" class="md-nav__link">
-    <span class="md-ellipsis">
-      Automatically Install Repos with SWE-agent
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#create-an-execution-environment" class="md-nav__link">
-    <span class="md-ellipsis">
-      Create an Execution Environment
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -706,7 +650,7 @@
   
   
     <li class="md-nav__item">
-      <a href="create_instances.html" class="md-nav__link">
+      <a href="../create_instances/" class="md-nav__link">
         
   
   
@@ -729,7 +673,7 @@
   
   
     <li class="md-nav__item">
-      <a href="harnesses.html" class="md-nav__link">
+      <a href="../harnesses/" class="md-nav__link">
         
   
   
@@ -752,7 +696,7 @@
   
   
     <li class="md-nav__item">
-      <a href="issue_gen.html" class="md-nav__link">
+      <a href="../issue_gen/" class="md-nav__link">
         
   
   
@@ -772,10 +716,30 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="difficulty_rating.html" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Rate Difficulty
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -786,6 +750,42 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#inference" class="md-nav__link">
+    <span class="md-ellipsis">
+      Inference
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prior-datasets" class="md-nav__link">
+    <span class="md-ellipsis">
+      Prior Datasets
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -798,7 +798,7 @@
   
   
     <li class="md-nav__item">
-      <a href="train_swe_agent.html" class="md-nav__link">
+      <a href="../train_swe_agent/" class="md-nav__link">
         
   
   
@@ -846,18 +846,18 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#automatically-install-repos-with-swe-agent" class="md-nav__link">
+  <a href="#inference" class="md-nav__link">
     <span class="md-ellipsis">
-      Automatically Install Repos with SWE-agent
+      Inference
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#create-an-execution-environment" class="md-nav__link">
+  <a href="#prior-datasets" class="md-nav__link">
     <span class="md-ellipsis">
-      Create an Execution Environment
+      Prior Datasets
     </span>
   </a>
   
@@ -880,7 +880,7 @@
 
 
   
-    <a href="https://github.com/SWE-bench/SWE-smith/edit/main/docs/guides/env_construction.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+    <a href="https://github.com/SWE-bench/SWE-smith/edit/main/docs/guides/difficulty_rating.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -888,46 +888,139 @@
   
 
 
-  <h1>Build Environments</h1>
+  <h1>Rate Difficulty</h1>
 
-<p>SWE-smith enables automatic construction of execution environments for repositories.
-We'll review the two steps of this process:</p>
+<p>To see how SWE-smith compares against real world tasks (e.g. SWE-bench), we LoRA Fine-Tuned a <a href="https://github.com/QwenLM/Qwen2.5-Coder">Qwen 2.5 32B Coder Instruct</a> model on 1.5k human ratings of the difficulty of real world bugs.</p>
+<p>Given the issue text and patch associated with a task instance, the model will rate the task as "easy" (&lt; 15 min), "medium" (15 min - 1 hour), or "hard" (1+ hours).</p>
+<h2 id="inference">Inference</h2>
+<p>You can rate the difficulty of your own task instances by following these steps:</p>
 <ol>
-<li>SWE-agent + LM attempts to install a repository + run the testing suite.</li>
-<li>Construct an execution environment (Docker image).</li>
+<li>
+<p>Download the <a href="">HuggingFace checkpoint</a>.</p>
+</li>
+<li>
+<p>Use <code>sglang</code> to serve the checkpoint. The training scripts available in the SWE-smith repository use <a href="https://modal.com/">Modal</a> as a compute service for hosting inference.</p>
+</li>
 </ol>
-<p>For this section, we'll use the <a href="https://github.com/Instagram/MonkeyType/">Instagram/MonkeyType</a> repository as a running example, 
-specifically at commit <a href="https://github.com/Instagram/MonkeyType/tree/70c3acf62950be5dfb28743c7a719bfdecebcd84"><code>70c3acf</code></a>.</p>
-<h2 id="automatically-install-repos-with-swe-agent">Automatically Install Repos with SWE-agent</h2>
-<p>Coming soon!</p>
-<h2 id="create-an-execution-environment">Create an Execution Environment</h2>
-<p>First, create the conda environment for the target repository.
-<div class="highlight"><pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>swesmith.build_repo.try_install_py<span class="w"> </span>Instagram/MonkeyType<span class="w"> </span>install_repo.sh<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--commit<span class="w"> </span>70c3acf62950be5dfb28743c7a719bfdecebcd84
+<div class="highlight"><pre><span></span><code><span class="nv">N_HOURS</span><span class="o">=</span><span class="m">4</span><span class="w"> </span><span class="nv">N_GPUS</span><span class="o">=</span><span class="m">4</span><span class="w"> </span>modal<span class="w"> </span>run<span class="w"> </span>--detach<span class="w"> </span>swesmith/train/serve_sglang.py<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--model-path<span class="w"> </span>/path/to/checkpoint<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--served-model-name<span class="w"> </span>gpt-4o<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--tokenizer-path<span class="w"> </span>/path/to/Qwen2.5-Coder-32B-Instruct
 </code></pre></div>
-where <code>install_repo.sh</code> is the script that installs the repository.
-(<a href="https://github.com/SWE-bench/SWE-smith/blob/main/configs/install_repo.sh">Example</a>)</p>
-<p>If successful, two artifacts will be produced under <code>logs/build_repo/records/</code>:
-* <code>sweenv_[repo + commit].yml</code>: A dump of the conda environment that was created.
-* <code>sweenv_[repo + commit].sh</code>: A log of the installation process.</p>
-<p>Next, run the following command to create a Docker image for the repository.</p>
-<div class="highlight"><pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>swesmith.build_repo.create_images<span class="w"> </span>--repos<span class="w"> </span>Instagram/MonkeyType
+<ol start="3">
+<li>Run the following script:</li>
+</ol>
+<div class="highlight"><pre><span></span><code>python<span class="w"> </span>swesmith/train/difficulty_rater/get_difficulties.py<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--base_url<span class="w"> </span>&lt;URL<span class="w"> </span>where<span class="w"> </span>model<span class="w"> </span>is<span class="w"> </span>hosted&gt;<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--dataset_path<span class="w"> </span>path/to/dataset.json
 </code></pre></div>
-<p>This command will create two artifacts:
-1. A mirror of the original repository at the specified commit, created under <a href="https://github.com/orgs/swesmith/repositories"><code>swesmith</code></a>. To change the organization, you can...
-    * Pass in an <code>--org</code> argument, or
-    * (If built from source) Change <code>ORG_NAME_GH</code> in <code>swesmith/constants.py</code>
-2. A Docker image (<code>swesmith.x86_64.&lt;repo&gt;.&lt;commit&gt;</code>) which contains the installed codebase.</p>
-<p>It's good practice to check that your Docker image works as expected.
-<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>--rm<span class="w"> </span>swesmith.x86_64.instagram__monkeytype.70c3acf6
-</code></pre></div>
-Within the container, run the testing suite (e.g. <code>pytest</code>) to ensure that the codebase is functioning as expected.</p>
-<div class="admonition note">
-<p class="admonition-title">Get existing Docker images</p>
-<p>All repositories represented in the SWE-smith <a href="https://huggingface.co/datasets/SWE-bench/SWE-smith">dataset</a> are available to download. Simply run:
-<div class="highlight"><pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>swesmith.build_repo.download_images
-</code></pre></div></p>
-</div>
+<p>The script will generate a <code>.json</code> file containing a mapping from each task instance to a difficulty score.
+You can then compute the dataset's difficulty score as the average of all task instance scores.</p>
+<h2 id="prior-datasets">Prior Datasets</h2>
+<p>Using our model, we've assessed the difficulty of existing datasets, assigning scores of 1/5/9 to easy/medium/hard tasks.</p>
+<table>
+<thead>
+<tr>
+<th>Dataset</th>
+<th># Instances</th>
+<th>Score</th>
+<th><code>easy</code></th>
+<th><code>med</code></th>
+<th><code>hard</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SWE-bench</td>
+<td>2294</td>
+<td>5.014</td>
+<td>438</td>
+<td>1408</td>
+<td>446</td>
+</tr>
+<tr>
+<td>└── Lite</td>
+<td>300</td>
+<td>3.893</td>
+<td>93</td>
+<td>197</td>
+<td>10</td>
+</tr>
+<tr>
+<td>└── Verified</td>
+<td>500</td>
+<td>3.960</td>
+<td>173</td>
+<td>284</td>
+<td>43</td>
+</tr>
+<tr>
+<td>SWE-bench Multimodal</td>
+<td>510</td>
+<td>6.036</td>
+<td>55</td>
+<td>265</td>
+<td>186</td>
+</tr>
+<tr>
+<td>SWE-gym</td>
+<td>2438</td>
+<td>5.625</td>
+<td>288</td>
+<td>1456</td>
+<td>664</td>
+</tr>
+<tr>
+<td>└── Lite</td>
+<td>230</td>
+<td>3.890</td>
+<td>67</td>
+<td>156</td>
+<td>4</td>
+</tr>
+<tr>
+<td>SWE-smith (LM Modify)</td>
+<td>1000</td>
+<td>3.304</td>
+<td>441</td>
+<td>542</td>
+<td>17</td>
+</tr>
+<tr>
+<td>SWE-smith (LM Rewrite)</td>
+<td>1000</td>
+<td>5.272</td>
+<td>68</td>
+<td>796</td>
+<td>136</td>
+</tr>
+<tr>
+<td>SWE-smith (Procedural)</td>
+<td>1000</td>
+<td>3.596</td>
+<td>374</td>
+<td>603</td>
+<td>23</td>
+</tr>
+<tr>
+<td>SWE-smith (PR Mirror)</td>
+<td>1000</td>
+<td>4.876</td>
+<td>206</td>
+<td>619</td>
+<td>175</td>
+</tr>
+<tr>
+<td>SWE-smith (Combine)</td>
+<td>1000</td>
+<td>5.720</td>
+<td>52</td>
+<td>716</td>
+<td>232</td>
+</tr>
+</tbody>
+</table>
+<p>From the table, we demonstrate that SWE-smith task instances are comparable to real world tasks, and that our bug generation techniques allow for a wide range of task difficulties.</p>
 
 
 
@@ -948,27 +1041,27 @@ Within the container, run the testing suite (e.g. <code>pytest</code>) to ensure
 <div class="floating-bubbles">
   <div class="floating-bubbles-title">Our projects</div>
   <a href="https://swebench.com" class="bubble" title="SWE-bench">
-    <img src="../assets/swebench_logo.png" alt="SWE-bench">
+    <img src="../../assets/swebench_logo.png" alt="SWE-bench">
     <span class="bubble-tooltip">SWE-bench</span>
   </a>
   <a href="https://swe-agent.com/" class="bubble" title="SWE-agent">
-    <img src="../assets/sweagent_logo.svg" alt="SWE-agent">
+    <img src="../../assets/sweagent_logo.svg" alt="SWE-agent">
     <span class="bubble-tooltip">SWE-agent</span>
   </a>
   <a href="https://mini-swe-agent.com/" class="bubble" title="Mini-SWE-Agent">
-    <img src="../assets/mini_logo.svg" alt="Mini-SWE-Agent">
+    <img src="../../assets/mini_logo.svg" alt="Mini-SWE-Agent">
     <span class="bubble-tooltip">Mini-SWE-Agent</span>
   </a>
   <a href="https://swe-rex.com/" class="bubble" title="SWE-rex">
-    <img src="../assets/swerex_logo.svg" alt="SWE-rex">
+    <img src="../../assets/swerex_logo.svg" alt="SWE-rex">
     <span class="bubble-tooltip">SWE-ReX</span>
   </a>
   <!-- <a href="https://swesmith.com" class="bubble" title="SWE-smith">
-    <img src="../assets/swesmith_logo.png" alt="SWE-smith">
+    <img src="../../assets/swesmith_logo.png" alt="SWE-smith">
     <span class="bubble-tooltip">SWE-smith</span>
   </a> -->
   <a href="https://www.swebench.com/sb-cli/" class="bubble" title="sb-cli">
-    <img src="../assets/sbcli_logo.svg" alt="sb-cli">
+    <img src="../../assets/sbcli_logo.svg" alt="sb-cli">
     <span class="bubble-tooltip">sb-cli</span>
   </a>
 </div>
@@ -998,7 +1091,7 @@ Within the container, run the testing suite (e.g. <code>pytest</code>) to ensure
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="index.html" class="md-footer__link md-footer__link--prev" aria-label="Previous: Tutorials">
+          <a href="../issue_gen/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Generate Issue Text">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -1008,20 +1101,20 @@ Within the container, run the testing suite (e.g. <code>pytest</code>) to ensure
                 Previous
               </span>
               <div class="md-ellipsis">
-                Tutorials
+                Generate Issue Text
               </div>
             </div>
           </a>
         
         
           
-          <a href="create_instances.html" class="md-footer__link md-footer__link--next" aria-label="Next: Create Instances">
+          <a href="../train_swe_agent/" class="md-footer__link md-footer__link--next" aria-label="Next: Train SWE-agents">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Create Instances
+                Train SWE-agents
               </div>
             </div>
             <div class="md-footer__button md-icon">
@@ -1057,10 +1150,10 @@ Within the container, run the testing suite (e.g. <code>pytest</code>) to ensure
     
     
       
-      <script id="__config" type="application/json">{"base": "..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.indexes", "content.action.edit", "navigation.footer", "content.code.copy", "content.footnote.tooltips", "header.autohide", "announce.dismiss", "content.code.annotate"], "search": "../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.indexes", "content.action.edit", "navigation.footer", "content.code.copy", "content.footnote.tooltips", "header.autohide", "announce.dismiss", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.50899def.min.js"></script>
+      <script src="../../assets/javascripts/bundle.50899def.min.js"></script>
       
     
   <script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
