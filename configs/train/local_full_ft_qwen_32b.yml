@@ -1,37 +1,28 @@
-# Config for multi-device full finetuning in full_finetune_distributed.py
-# using a Qwen2.5 7B model
-#
-# This config assumes that you've run the following command before launching
-# this run:
-#   tune download Qwen/Qwen2.5-7B-Instruct --output-dir /tmp/Qwen2_5-7B-Instruct
-#
-# To launch on 2 devices, run the following command from root:
-#   tune run --nnodes 1 --nproc_per_node 2 full_finetune_distributed --config qwen2_5/7B_full
-#
-# You can add specific overrides through the command line. For example
-# to override the checkpointer directory while launching training
-# you can run:
-#   tune run --nnodes 1 --nproc_per_node 2 full_finetune_distributed --config qwen2_5/7B_full checkpointer.checkpoint_dir=<YOUR_CHECKPOINT_DIR>
-#
-# This config works best when the model is being fine-tuned on 2+ GPUs.
-# Single device full finetuning requires more memory optimizations. It's
-# best to use 7B_full_single_device.yaml for those cases
-
+# Config for local multi-device full finetuning
+# Identical hyperparameters to the Modal cloud version for reproducibility
 exp_name: qwen2p5-coder-32b-full-lr1e-4-warmup5___xml_all_250413
-output_dir: /weights/exps/${exp_name}
+output_dir: /mnt/nfs/liheng/models/exps/${exp_name}
+
 # Model Arguments
 model:
   _component_: torchtune.models.qwen2_5.qwen2_5_32b_instruct
 
 tokenizer:
   _component_: torchtune.models.qwen2_5.qwen2_5_tokenizer
-  path: /weights/Qwen/Qwen2.5-Coder-32B-Instruct/vocab.json
-  merges_file: /weights/Qwen/Qwen2.5-Coder-32B-Instruct/merges.txt
+  # PATH CHANGE: Updated to your local NFS path
+  path: /mnt/nfs/liheng/models/Qwen/Qwen2.5-Coder-32B-Instruct/vocab.json
+  merges_file: /mnt/nfs/liheng/models/Qwen/Qwen2.5-Coder-32B-Instruct/merges.txt
   max_seq_len: 32768
+
+
+# 1. Change this to True
+resume_from_checkpoint: True
 
 checkpointer:
   _component_: torchtune.training.FullModelHFCheckpointer
-  checkpoint_dir: /weights/Qwen/Qwen2.5-Coder-32B-Instruct
+  # 2. Update checkpoint_dir to point to the epoch_0 folder
+  checkpoint_dir: /mnt/nfs/liheng/models/Qwen/Qwen2.5-Coder-32B-Instruct
+  # 3. List the model files found in that specific folder
   checkpoint_files: [
     model-00001-of-00014.safetensors,
     model-00002-of-00014.safetensors,
@@ -48,23 +39,53 @@ checkpointer:
     model-00013-of-00014.safetensors,
     model-00014-of-00014.safetensors,
   ]
-  recipe_checkpoint: null
-  output_dir: ${output_dir}
+  
+  # 4. Point this to the recipe_state.pt file
+  recipe_checkpoint: recipe_state/recipe_state.pt
+  
+  output_dir: /mnt/nfs/liheng/models/exps/${exp_name}
   model_type: QWEN2
-  safe_serialization: True
-resume_from_checkpoint: False
+
+# checkpointer:
+#   _component_: torchtune.training.FullModelHFCheckpointer
+#   # PATH CHANGE: Updated to your local NFS path
+#   checkpoint_dir: /mnt/nfs/liheng/models/Qwen/Qwen2.5-Coder-32B-Instruct
+#   checkpoint_files: [
+#     model-00001-of-00014.safetensors,
+#     model-00002-of-00014.safetensors,
+#     model-00003-of-00014.safetensors,
+#     model-00004-of-00014.safetensors,
+#     model-00005-of-00014.safetensors,
+#     model-00006-of-00014.safetensors,
+#     model-00007-of-00014.safetensors,
+#     model-00008-of-00014.safetensors,
+#     model-00009-of-00014.safetensors,
+#     model-00010-of-00014.safetensors,
+#     model-00011-of-00014.safetensors,
+#     model-00012-of-00014.safetensors,
+#     model-00013-of-00014.safetensors,
+#     model-00014-of-00014.safetensors,
+#   ]
+#   recipe_checkpoint: null
+#   output_dir: ${output_dir}
+#   model_type: QWEN2
+#   safe_serialization: True
+# resume_from_checkpoint: False
 
 # Dataset and Sampler
 dataset:
   _component_: torchtune.datasets.chat_dataset
   source: json
-  data_files: /data/archive/swesmith.trajs.250413.jsonl
+  # PATH CHANGE: Point this to your local .jsonl location
+  data_files: /mnt/nfs/liheng/data/SWE-agent-LM-32B_train_5016_trajectories.json
   split: train
   conversation_column: messages
   conversation_style: openai
   train_on_input: False
   new_system_prompt: null
-  packed: False  # True increases speed
+  packed: False  # Kept False to match original exactly
+
+# Identical Hyperparameters
 seed: 42
 shuffle: True
 batch_size: 1
@@ -85,8 +106,8 @@ loss:
 # Training
 epochs: 3
 max_steps_per_epoch: null
-gradient_accumulation_steps: 1 # Use to increase virtual batch size
-compile: True  # pytorch compile, set to true for better perf/memory
+gradient_accumulation_steps: 1 
+compile: True  
 
 # Logging
 metric_logger:
@@ -100,32 +121,20 @@ log_peak_memory_stats: True
 # Environment
 device: cuda
 dtype: bf16
-enable_activation_checkpointing: True  # True reduces memory
-enable_activation_offloading: False  # True reduces memory
-# custom_sharded_layers: ['tok_embeddings']  # Layers to shard separately (useful for large vocab size models). Lower Memory, but lower speed.
+enable_activation_checkpointing: True
+enable_activation_offloading: False
 
-# Show case the usage of pytorch profiler
-# Set enabled to False as it's only needed for debugging training
+# Profiler (Disabled as per original)
 profiler:
   _component_: torchtune.training.setup_torch_profiler
-
   enabled: False
-
-  #Output directory of trace artifacts
   output_dir: ${output_dir}/profiling_outputs
-
-  #`torch.profiler.ProfilerActivity` types to trace
   cpu: True
   cuda: True
-
-  #trace options passed to `torch.profiler.profile`
   profile_memory: False
   with_stack: False
   record_shapes: True
   with_flops: False
-
-  # `torch.profiler.schedule` options:
-  # wait_steps -> wait, warmup_steps -> warmup, active_steps -> active, num_cycles -> repeat
   wait_steps: 5
   warmup_steps: 5
   active_steps: 2
